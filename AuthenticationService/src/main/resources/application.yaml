@@ -1,0 +1,35 @@
+server:
+  port: 8088
+  servlet:
+    context-path: /web-app-auth
+#Срок годности refreshToken 9 часов: 9*60*60
+jwt:
+  secret: h4f8093h4f983yhrt9834hr0934hf0hf493g493gf438rh438th34g34g
+  refresh:
+    length: 50
+    max_age: 32400
+  lifetime:
+    access: 900
+    refresh: 2592000
+
+#Срок годности пароля в МЕСЯЦАХ
+app:
+  credential:
+    expired: 6
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/clinic
+    username: postgres
+    password: London8793
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQL95Dialect
+
+  liquibase:
+    change-log: db/dbchangelog-master.xml
+    url: jdbc:postgresql://127.0.0.1:5432/clinic
+    user: postgres
+    password: London8793
