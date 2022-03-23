@@ -66,4 +66,9 @@ public class AppAuthority implements GrantedAuthority {
     public void setId(Long id) {
         this.id = id;
     }
+
+    @Override
+    public String toString() {
+        return this.authority;
+    }
 }
