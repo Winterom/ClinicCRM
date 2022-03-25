@@ -79,7 +79,7 @@
   padding-top: 15px;
 }
 .left-collapse{
-  width: 35vh;
+  width: 39vh;
   background: white;
   border-right: 1px solid black;
   padding-left: 0.5vh;
@@ -130,4 +130,9 @@ details > summary {
   font-weight:bold;
   background: white;
   padding-left: 1vh;
+}
+.content{
+  margin-left: 1.5vh;
+  background: white;
+  width: 100%;
 }

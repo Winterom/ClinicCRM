@@ -5,6 +5,7 @@ import {MainPageGuard} from "../../guard/main-page-guard.service";
 import {DesktopComponent} from "./desktop/desktop.component";
 import {UsersComponent} from "./admin/users/users.component";
 import {AuthoritiesComponent} from "./admin/authorities/authorities.component";
+import {LoggingComponent} from "./admin/logging/logging.component";
 
 
 const mainPageRoutes: Routes =[
@@ -22,6 +23,13 @@ const mainPageRoutes: Routes =[
       {
         path:'authorities',
         component:AuthoritiesComponent
+      },
+      {
+        path:'logging',
+        component:LoggingComponent
+      },
+      {
+        path: '', redirectTo: 'desktop', pathMatch: 'full'
       }
     ]
   }

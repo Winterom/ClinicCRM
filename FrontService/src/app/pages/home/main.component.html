@@ -94,7 +94,8 @@
     <div>
       <ul>
         <li>
-          <div class="header-left-sidebar-menu collapse-active">
+          <div class="header-left-sidebar-menu" routerLinkActive="collapse-active">
+            <a [routerLink]="['./desktop']">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
                  class="bi bi-speedometer" viewBox="0 0 16 16">
               <path
@@ -103,6 +104,7 @@
                     d="M6.664 15.889A8 8 0 1 1 9.336.11a8 8 0 0 1-2.672 15.78zm-4.665-4.283A11.945 11.945 0 0 1 8 10c2.186 0 4.236.585 6.001 1.606a7 7 0 1 0-12.002 0z"/>
             </svg>
             <span class="span-ml">Рабочий стол</span>
+            </a>
           </div>
           <div class="divider"></div>
         </li>
