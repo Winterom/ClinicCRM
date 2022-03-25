@@ -6,7 +6,7 @@ import {UserAppService} from "../service/user-app.service";
 @Injectable({
   providedIn: 'root'
 })
-export class HomeGuard implements CanActivate {
+export class MainPageGuard implements CanActivate {
   constructor(private user: UserAppService,private router: Router) {
   }
   canActivate(

@@ -48,8 +48,6 @@ public class AppUser {
     @Column(name = "expired_credentials")
     private LocalDateTime expiredCredentials;
 
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "appUser")
-    private RefreshToken refreshToken;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "users_roles",
@@ -190,13 +188,6 @@ public class AppUser {
         this.phoneVerified = telephoneVerified;
     }
 
-    public RefreshToken getRefreshToken() {
-        return refreshToken;
-    }
-
-    public void setRefreshToken(RefreshToken refreshToken) {
-        this.refreshToken = refreshToken;
-    }
 
     public void setSurname(String surname) {
         this.surname = surname;

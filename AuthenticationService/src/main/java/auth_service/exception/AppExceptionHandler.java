@@ -3,8 +3,10 @@ package auth_service.exception;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -45,5 +47,10 @@ public class AppExceptionHandler {
     public ResponseEntity<AppError> refreshTokenNotValid(RefreshTokenExpiredOrNotFoundException e){
         log.error(e.getMessage(), e);
         return new ResponseEntity<>(new AppError(HttpStatus.UNAUTHORIZED.name(), e.getMessage()), HttpStatus.UNAUTHORIZED);
+    }
+    @ExceptionHandler({ AccessDeniedException.class })
+    public ResponseEntity<Object> accessDeniedError(){
+        log.error("Access denied");
+        return new ResponseEntity<Object>("Access denied", new HttpHeaders(), HttpStatus.FORBIDDEN);
     }
 }

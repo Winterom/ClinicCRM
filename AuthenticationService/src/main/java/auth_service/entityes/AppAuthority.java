@@ -1,11 +1,7 @@
 package auth_service.entityes;
-
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.Collection;
 
 @Table(name = "authorities")
@@ -16,18 +12,12 @@ public class AppAuthority implements GrantedAuthority {
     private Long id;
 
     @Column(name = "authority")
-    private String authority;
+    @Enumerated(EnumType.STRING)
+    private AppAuthoritiesEnum authority;
 
     @Column(name = "description")
     private String description;
 
-    @CreationTimestamp
-    @Column(name = "created_at")
-    private LocalDateTime createdAt;
-
-    @UpdateTimestamp
-    @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
 
     @ManyToMany
     @JoinTable(name = "roles_authorities",
@@ -35,14 +25,14 @@ public class AppAuthority implements GrantedAuthority {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Collection<AppRole> roles;
 
-    public AppAuthority(String authorities) {
+    public AppAuthority(AppAuthoritiesEnum authorities) {
         this.authority = authorities;
     }
 
     public AppAuthority() {
     }
 
-    public void setAuthority(String authorities) {
+    public void setAuthority(AppAuthoritiesEnum authorities) {
         this.authority = authorities;
     }
 
@@ -56,7 +46,7 @@ public class AppAuthority implements GrantedAuthority {
 
     @Override
     public String getAuthority() {
-        return this.authority;
+        return this.authority.name();
     }
 
     public Long getId() {
@@ -69,6 +59,6 @@ public class AppAuthority implements GrantedAuthority {
 
     @Override
     public String toString() {
-        return this.authority;
+        return this.authority.name();
     }
 }

@@ -50,9 +50,9 @@ export class LoginComponent implements OnInit {
         this.isLoggedIn = true;
         if (this.redirectURL) {
           this.router.navigateByUrl(this.redirectURL,)
-            .catch(() => this.router.navigate(['home']))
+            .catch(() => this.router.navigate(['main']))
         } else {
-          this.router.navigate(['home'])
+          this.router.navigate(['main'])
         }
       },
       error: err => {

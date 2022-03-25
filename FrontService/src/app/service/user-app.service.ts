@@ -9,7 +9,7 @@ export class UserAppService {
   private isLogin: boolean = false;
   private _expireDate: Date | undefined;
   private _email: string='';
-  private _roles = [];
+  private _roles = new Set;
 
   constructor() {
     if (!this.getToken()) {
@@ -24,6 +24,10 @@ export class UserAppService {
   }
 
   signOut(): void {
+    this._roles.clear();
+    this.isLogin =false;
+    this._email='';
+    this._expireDate = undefined;
     window.localStorage.clear();
   }
 
@@ -47,7 +51,7 @@ export class UserAppService {
     let tok = JSON.parse(jsonPayload);
     this._expireDate = new Date(tok.exp * 1000);
     this._email = tok.sub;
-    this._roles = tok.roles;
+    this._roles = new Set(tok.roles);
   }
 
   isNonExpire():boolean{
@@ -75,4 +79,10 @@ export class UserAppService {
   get email(): string {
     return this._email;
   }
+
+  get roles(): Set<any> {
+    return this._roles;
+  }
 }
+
+
