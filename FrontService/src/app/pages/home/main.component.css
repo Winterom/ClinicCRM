@@ -99,7 +99,7 @@ details > summary {
   margin-left: 1vh;
 }
 .left-collapse.collapsed {
-  visibility: hidden;
+  display: none;
 }
 
 .left-collapse a {
@@ -135,4 +135,6 @@ details > summary {
   margin-left: 1.5vh;
   background: white;
   width: 100%;
+  padding-left: 1vh;
+  padding-top: 1vh;
 }

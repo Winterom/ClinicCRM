@@ -8,3 +8,4 @@
 /FrontService/karma.conf.js
 /FrontService/.browserslistrc
 /FrontService/.editorconfig
+/AuthenticationService/target/

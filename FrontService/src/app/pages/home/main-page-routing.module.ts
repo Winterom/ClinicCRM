@@ -12,6 +12,7 @@ const mainPageRoutes: Routes =[
   {
     path: 'main',
     component: MainComponent, canActivate: [MainPageGuard],
+    data: { breadcrumb: 'Главная' },
     children:[{
       path: 'desktop',
       component: DesktopComponent,
@@ -19,14 +20,17 @@ const mainPageRoutes: Routes =[
       {
         path:'users',
         component:UsersComponent,
+        data: { breadcrumb: 'Пользователи' }
       },
       {
         path:'authorities',
-        component:AuthoritiesComponent
+        component:AuthoritiesComponent,
+        data: { breadcrumb: 'Права и привелегии' }
       },
       {
         path:'logging',
-        component:LoggingComponent
+        component:LoggingComponent,
+        data: { breadcrumb: 'Логгирование' }
       },
       {
         path: '', redirectTo: 'desktop', pathMatch: 'full'

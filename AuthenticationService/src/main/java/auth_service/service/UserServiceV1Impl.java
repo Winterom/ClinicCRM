@@ -2,7 +2,7 @@ package auth_service.service;
 
 import auth_service.dto.AppUserDto;
 import auth_service.dto.JwtDto;
-import auth_service.dto.TableAppUser;
+import auth_service.dto.TableAppUserDto;
 import auth_service.dto.WrapperEntityDto;
 import auth_service.entityes.AppUser;
 import auth_service.exception.BadPasswordOrUsernameException;
@@ -17,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -25,6 +26,7 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
+import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 
@@ -89,13 +91,13 @@ public class UserServiceV1Impl implements UserService {
     }
 
     @Override
-    public ResponseEntity<WrapperEntityDto<TableAppUser>> getAllUser(int page) {
-        WrapperEntityDto<TableAppUser> wrapper = new WrapperEntityDto<>();
+    public ResponseEntity<WrapperEntityDto<TableAppUserDto>> getAllUser(int page) {
+        WrapperEntityDto<TableAppUserDto> wrapper = new WrapperEntityDto<>();
         /*List<AppUser> userList = entityManager.createQuery("SELECT a from AppUser a",AppUser.class).getResultList();
         wrapper.setListWrapper(userList.stream().map(AppUserDto.Response.userTable::new).collect(Collectors.toList()));*/
-        TypedQuery<TableAppUser> userTable = entityManager.createQuery("SELECT new auth_service.dto.TableAppUser(a.id, a.firstname, " +
+        TypedQuery<TableAppUserDto> userTable = entityManager.createQuery("SELECT new auth_service.dto.TableAppUserDto(a.id, a.firstname, " +
                 "a.surname, a.lastname, a.email, a.phoneNumber, a.isLocked, a.isEmailVerified, " +
-                "a.phoneVerified) from AppUser a",TableAppUser.class);
+                "a.phoneVerified) from AppUser a", TableAppUserDto.class);
         wrapper.setListWrapper(userTable.getResultList());
         return ResponseEntity.ok(wrapper);
     }

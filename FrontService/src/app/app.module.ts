@@ -12,6 +12,8 @@ import {HttpClientModule} from "@angular/common/http";
 import { DesktopComponent } from './pages/home/desktop/desktop.component';
 import {LoginComponent} from "./pages/login/login.component";
 import {MainPageModule} from "./pages/home/main-page.module";
+import { BreadcrumbComponent } from './pages/breadcrumb/breadcrumb.component';
+import {AuthInterceptor} from "./helpers/auth.interceptor";
 
 @NgModule({
   declarations: [
@@ -19,7 +21,8 @@ import {MainPageModule} from "./pages/home/main-page.module";
     AdminComponent,
     MainComponent,
     LoginComponent,
-    DesktopComponent
+    DesktopComponent,
+    BreadcrumbComponent
 
   ],
   imports: [
@@ -29,7 +32,7 @@ import {MainPageModule} from "./pages/home/main-page.module";
     HttpClientModule,
     MainPageModule
   ],
-  providers: [],
+  providers: [AuthInterceptor],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

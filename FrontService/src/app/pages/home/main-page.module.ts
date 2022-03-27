@@ -5,13 +5,15 @@ import {MainPageRoutingModule} from "./main-page-routing.module";
 import {UsersComponent} from "./admin/users/users.component";
 import {AuthoritiesComponent} from "./admin/authorities/authorities.component";
 import {LoggingComponent} from "./admin/logging/logging.component";
+import { UserByIdComponent } from './admin/users/user-by-id/user-by-id.component';
 
 
 @NgModule({
   declarations: [
     UsersComponent,
     AuthoritiesComponent,
-    LoggingComponent
+    LoggingComponent,
+    UserByIdComponent
   ],
   imports: [
     CommonModule,

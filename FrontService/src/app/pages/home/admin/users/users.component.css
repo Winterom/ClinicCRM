@@ -1,0 +1,69 @@
+h2{
+  text-align: center;
+}
+
+.container{
+  display: flex;
+  justify-content: center;
+}
+
+table{
+
+  border-collapse: collapse;
+  border: 1px solid grey;
+
+}
+thead{
+  font-weight: bold;
+  background: #87CEFA;
+  font-size: 1.1rem;
+}
+th{
+  height: 2rem;
+}
+table tbody tr:nth-child(3n+1){
+  background: #f2fff5;
+}
+
+/* Строки 2,5,8... */
+table tbody tr:nth-child(3n+2){
+  background: #ffeaea;
+}
+
+/* Строки 3,6,9... */
+table tbody tr:nth-child(3n+3){
+  background: #eeecff;
+}
+tbody{
+  cursor: pointer;
+}
+
+th{
+  border: 1px solid grey;
+}
+
+td{
+  border: 1px solid grey;
+  height: 3rem;
+}
+.td_id{
+  width: 5vh;
+  text-align: center;
+}
+.td_fio{
+  width: 10rem;
+  padding-left: 1vh;
+}
+.td_email{
+  width: 10rem;
+  padding-left: 1vh;
+}
+
+.td_phone{
+  padding-left: 1vh;
+  width: 10rem;
+}
+
+.td_lock{
+  width: 10rem;
+}

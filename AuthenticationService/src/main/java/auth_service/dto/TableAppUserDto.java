@@ -2,7 +2,7 @@ package auth_service.dto;
 
 import auth_service.entityes.AppUser;
 
-public class TableAppUser {
+public class TableAppUserDto {
     private Long id;
     private String firstname;
     private String surname;
@@ -13,10 +13,10 @@ public class TableAppUser {
     private Boolean isEmailVerified;
     private Boolean isPhoneNumberVerified;
 
-    public TableAppUser() {
+    public TableAppUserDto() {
     }
 
-    public TableAppUser(AppUser usr){
+    public TableAppUserDto(AppUser usr){
         this.id = usr.getId();
         this.firstname = usr.getFirstname();
         this.surname = usr.getSurname();
@@ -28,7 +28,7 @@ public class TableAppUser {
         this.isPhoneNumberVerified = usr.getPhoneVerified();
     }
 
-    public TableAppUser(Long id, String firstname, String surname, String lastname,
+    public TableAppUserDto(Long id, String firstname, String surname, String lastname,
                      String email, String phoneNumber, Boolean isLocked, Boolean isEmailVerified,
                      Boolean isPhoneNumberVerified) {
         this.id = id;
