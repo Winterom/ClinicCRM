@@ -1,0 +1,169 @@
+h2{
+  text-align: center;
+}
+
+.container{
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+
+}
+form{
+  position: sticky;
+  top: 0;
+  background: #f7f7f7;
+  border: 1px solid darkgray;
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  padding-left: 1rem;
+  padding-top: 1rem;
+}
+label{
+  background: white;
+  position: relative;
+  bottom: -10px;
+  left: 20px;
+  z-index: 10;
+
+}
+form em{
+  margin-right: 1em;
+  margin-left: 1em;
+}
+form button{
+  padding: 0.5em 1em;
+  margin-top: 1em;
+  margin-right: 2em;
+  font-size: inherit;
+  cursor: pointer;
+  border-radius:  0.25rem;
+  border: 1px solid #bdbdbd;
+}
+span{
+  margin-left: 4px;
+}
+.form_item{
+  margin-bottom: 0.3em;
+}
+
+select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+.select {
+  border: 1px solid #bdbdbd;
+  border-radius:  0.25rem;
+  padding: 0.25em 0.5em;
+  font-size: 1.1rem;
+  cursor: pointer;
+  line-height: 1.1;
+  background-color: #fff;
+  background-image: linear-gradient(to top, #f9f9f9, #fff 33%);
+}
+input[type=checkbox] {
+  position: relative;
+  cursor: pointer;
+}
+input[type=checkbox]:before {
+  content: "";
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  top: 0;
+  left: 0;
+  border: 2px solid #bdbdbd;
+  border-radius:  0.25rem;
+  background-color: white;
+}
+input[type=checkbox]:checked:after {
+  content: "";
+  display: block;
+  width: 5px;
+  height: 10px;
+  border: solid black;
+  border-width: 0 2px 2px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+  position: absolute;
+  top: 2px;
+  left: 6px;
+}
+.text-field__input {
+  width: 20em;
+  margin-left: 2px;
+  height: calc(1rem + 2px);
+  padding: 0.375rem 0.75rem;
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #212529;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid #bdbdbd;
+  border-radius: 0.25rem;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+table{
+  border-collapse: collapse;
+  border: 1px solid grey;
+
+}
+thead{
+  font-weight: bold;
+  background: #87CEFA;
+  font-size: 1.1rem;
+}
+th{
+  height: 2rem;
+}
+table tbody tr:nth-child(3n+1){
+  background: #f2fff5;
+}
+
+/* Строки 2,5,8... */
+table tbody tr:nth-child(3n+2){
+  background: #ffeaea;
+}
+
+/* Строки 3,6,9... */
+table tbody tr:nth-child(3n+3){
+  background: #eeecff;
+}
+tbody{
+  cursor: pointer;
+}
+
+th{
+  border: 1px solid grey;
+}
+
+td{
+  border: 1px solid grey;
+  height: 3rem;
+}
+.td_id{
+  width: 5vh;
+  text-align: center;
+}
+.td_fio{
+  width: 10rem;
+  padding-left: 1vh;
+}
+.td_email{
+  width: 10rem;
+  padding-left: 1vh;
+}
+
+.td_phone{
+  padding-left: 1vh;
+  width: 10rem;
+}
+
+.td_lock{
+  width: 10rem;
+}
+

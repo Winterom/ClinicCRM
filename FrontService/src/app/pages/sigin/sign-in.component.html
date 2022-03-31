@@ -1,0 +1,32 @@
+<div class="login-box">
+  <h2>Авторизация</h2>
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="user-box">
+      <input type="text"
+             formControlName="email"
+             class="form-control"
+             [ngClass]="{ 'is-invalid': submitted && f['email'].errors }"/>
+      <label>Email</label>
+
+    </div>
+    <div class="user-box">
+      <input type="password"
+             formControlName="password"
+             class="form-control"
+             [ngClass]="{ 'is-invalid': submitted && f['password'].errors }"/>
+      <label>Password</label>
+    </div>
+    <div *ngIf="submitted && f['email'].errors" class="invalid-feedback">
+      <div *ngIf="f['email'].errors['required']">Логин обязательное поле</div>
+    </div>
+    <div *ngIf="submitted && f['password'].errors" class="invalid-feedback">
+      <div *ngIf="f['password'].errors['required']">Пароль обязателен</div>
+    </div>
+    <div *ngIf="submitted && statusCode" class="invalid-feedback">
+      <div *ngIf="statusCode==401">Неверный email или пароль</div>
+    </div>
+    <button type="submit">
+      Войти
+    </button>
+  </form>
+</div>

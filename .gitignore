@@ -1,2 +1,11 @@
 # Project exclude paths
 /GatewayService/target/
+/FrontService/README.md
+/FrontService/tsconfig.app.json
+/FrontService/tsconfig.json
+/FrontService/tsconfig.spec.json
+/FrontService/package-lock.json
+/FrontService/karma.conf.js
+/FrontService/.browserslistrc
+/FrontService/.editorconfig
+/AuthenticationService/target/
