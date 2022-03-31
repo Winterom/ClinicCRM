@@ -1,8 +1,8 @@
 package auth_service.repositoryes;
 
 
-import auth_service.entityes.AppUser;
-import auth_service.entityes.RefreshToken;
+import auth_service.entities.AppUser;
+import auth_service.entities.RefreshToken;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

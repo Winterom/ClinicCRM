@@ -49,6 +49,7 @@
 .wrapper{
   display: flex;
   margin-top: 0.5vh;
+  max-width: 98vw;
 }
 .left-sidebar{
   width: 50px;
@@ -132,9 +133,10 @@ details > summary {
   padding-left: 1vh;
 }
 .content{
-  margin-left: 1.5vh;
+  margin-left: 0.6vw;
   background: white;
   width: 100%;
-  padding-left: 1vh;
+  padding-left: 1vw;
   padding-top: 1vh;
+  padding-right: 1vw;
 }

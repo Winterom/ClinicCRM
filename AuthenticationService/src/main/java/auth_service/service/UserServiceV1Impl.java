@@ -2,33 +2,38 @@ package auth_service.service;
 
 import auth_service.dto.AppUserDto;
 import auth_service.dto.JwtDto;
-import auth_service.dto.TableAppUserDto;
-import auth_service.dto.WrapperEntityDto;
-import auth_service.entityes.AppUser;
+import auth_service.dto.PaginationEntity;
+import auth_service.entities.AppUser;
 import auth_service.exception.BadPasswordOrUsernameException;
 import auth_service.exception.EmailExistsException;
 import auth_service.exception.PhoneNumberExistsException;
 import auth_service.exception.PhoneNumberValidationException;
 import auth_service.repositoryes.UserRepository;
+import auth_service.repositoryes.specification.AppUserSpecification;
 import auth_service.utils.JwtTokenUtils;
+import auth_service.validators.FieldNameChecker;
 import auth_service.validators.PhoneNumberValidator;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
-import java.security.Principal;
-import java.time.LocalDateTime;
+import java.time.LocalDateTime;;
 import java.util.HashSet;
+import java.util.List;
+import java.util.stream.Collectors;
+
 
 @Service
 public class UserServiceV1Impl implements UserService {
@@ -90,20 +95,10 @@ public class UserServiceV1Impl implements UserService {
         return userRepository.save(usr);
     }
 
-    @Override
-    public ResponseEntity<WrapperEntityDto<TableAppUserDto>> getAllUser(int page) {
-        WrapperEntityDto<TableAppUserDto> wrapper = new WrapperEntityDto<>();
-        /*List<AppUser> userList = entityManager.createQuery("SELECT a from AppUser a",AppUser.class).getResultList();
-        wrapper.setListWrapper(userList.stream().map(AppUserDto.Response.userTable::new).collect(Collectors.toList()));*/
-        TypedQuery<TableAppUserDto> userTable = entityManager.createQuery("SELECT new auth_service.dto.TableAppUserDto(a.id, a.firstname, " +
-                "a.surname, a.lastname, a.email, a.phoneNumber, a.isLocked, a.isEmailVerified, " +
-                "a.phoneVerified) from AppUser a", TableAppUserDto.class);
-        wrapper.setListWrapper(userTable.getResultList());
-        return ResponseEntity.ok(wrapper);
-    }
 
     /*В качестве идентификатора используем почту*/
     @Override
+    @Transactional
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         AppUser appUser= userRepository.getAppUserByEmailAndIsLockedFalse(email).orElseThrow(BadPasswordOrUsernameException::new);
         return new User(appUser.getEmail(),appUser.getPassword(),appUser.getAuthorities());
@@ -117,6 +112,33 @@ public class UserServiceV1Impl implements UserService {
     @Override
     public Boolean checkPhoneNumber(String phoneNumber){
         return userRepository.getAppUserByPhoneNumber(phoneNumber).isEmpty();
+    }
+
+    @Override
+    public PaginationEntity<AppUserDto.Response.userTable> getAllUser(Integer page, Integer itemInPage, String sortField, boolean directSort, String searchField, String searchValue) {
+        /*ASC по возрастанию Desc убывание*/
+        Sort.Direction direction =Sort.Direction.ASC;
+        if (!directSort){
+            direction = Sort.Direction.DESC;
+        }
+        /* По умолчанию сортируем по полю id*/
+        Sort sort;
+        String field = FieldNameChecker.checkFieldName(AppUser.class,sortField);
+        if (field!=null){
+             sort = Sort.by(direction,sortField);
+        }else {
+            sort = Sort.by(direction,"id");
+        }
+        /*Добавляем спецификацию исходя из параметров запроса*/
+        Specification<AppUser> spec;
+        if (searchValue!=null){
+            spec= Specification.where(AppUserSpecification.valueLike(searchField,searchValue));
+        }else{
+            spec = Specification.where(null);
+        }
+        Page<AppUser> pageable = userRepository.findAll(spec, PageRequest.of(page - 1, itemInPage,sort));
+        List<AppUserDto.Response.userTable> result = pageable.getContent().stream().map(AppUserDto.Response.userTable::new).collect(Collectors.toList());
+        return new PaginationEntity<>(pageable.getTotalPages(), page, result);
     }
 
 

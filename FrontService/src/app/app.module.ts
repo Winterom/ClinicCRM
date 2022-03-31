@@ -10,20 +10,15 @@ import { ReactiveFormsModule} from "@angular/forms";
 import {HttpClientModule} from "@angular/common/http";
 
 import { DesktopComponent } from './pages/home/desktop/desktop.component';
-import {LoginComponent} from "./pages/login/login.component";
+import {SignInComponent} from "./pages/sigin/sign-in.component";
 import {MainPageModule} from "./pages/home/main-page.module";
-import { BreadcrumbComponent } from './pages/breadcrumb/breadcrumb.component';
 import {AuthInterceptor} from "./helpers/auth.interceptor";
+import {BreadcrumbComponent} from "./pages/breadcrumb/breadcrumb.component";
 
 @NgModule({
   declarations: [
     AppComponent,
-    AdminComponent,
-    MainComponent,
-    LoginComponent,
-    DesktopComponent,
-    BreadcrumbComponent
-
+    SignInComponent
   ],
   imports: [
     BrowserModule,

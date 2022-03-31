@@ -1,9 +1,37 @@
 <h2>Список пользователей</h2>
 <div class="container">
-  <div>
-    <div>Количество на странице</div>
-<table>
-  <thead>
+  <div class="filters">
+    <label for="search_form">Фильтры</label>
+    <form id="search_form" [formGroup]="form" (ngSubmit)="onSubmit()">
+      <div class="form_item">
+        <em>Количество на странице:</em>
+        <select class="select" formControlName="sizeValueControl" >
+          <option *ngFor="let value of sizeValue" [ngValue]="value">{{value.value}}</option>
+        </select>
+      </div>
+      <div class="form_item">
+        <em>Сортировать по полю:</em>
+        <select class="select" formControlName="fieldSortControl">
+          <option *ngFor="let field of fieldValue" [ngValue]="field">{{field.value}}</option>
+        </select>
+        <em>По возрастанию: </em>
+        <input formControlName="checkBoxSortedControl" class="custom-checkbox" type="checkbox" id="checkbox" checked>
+      </div>
+      <div class="form_item">
+        <em>Поиск по полю</em>
+        <select class="select" formControlName="fieldSearchControl">
+          <option *ngFor="let field2 of fieldValue" [ngValue]="field2">{{field2.value}}</option>
+        </select>
+        <input formControlName="valueSearchControl" type="text" class="text-field__input"
+               placeholder="Введите значение для поиска">
+        <span>Минимум три символа</span>
+      </div>
+      <button (click)="onReset()">Очистить</button>
+      <button type="submit">Применить</button>
+    </form>
+  </div>
+  <table>
+    <thead>
     <tr>
       <th>ID</th>
       <th>Фамилия</th>
@@ -13,18 +41,18 @@
       <th>Телефон</th>
       <th>Блокировка</th>
     </tr>
-  </thead>
-  <tbody>
-  <tr *ngFor="let item of usersArray">
-    <td class="td_id">{{item.id}}</td>
-    <td class="td_fio">{{item.surname}}</td>
-    <td class="td_fio">{{item.firstname}}</td>
-    <td class="td_fio">{{item.lastname}}</td>
-    <td class="td_email">{{item.email}}</td>
-    <td class="td_phone">{{item.phoneNumber}}</td>
-    <td class="td_lock">{{item.isLocked}}</td>
-  </tr>
-  </tbody>
-</table>
+    </thead>
+    <tbody>
+    <tr *ngFor="let item of usersArray" (click)="getUserById(item.id)">
+      <td class="td_id">{{item.id}}</td>
+      <td class="td_fio">{{item.surname}}</td>
+      <td class="td_fio">{{item.firstname}}</td>
+      <td class="td_fio">{{item.lastname}}</td>
+      <td class="td_email">{{item.email}}</td>
+      <td class="td_phone">{{item.phoneNumber}}</td>
+      <td class="td_lock">{{item.isLocked}}</td>
+    </tr>
+    </tbody>
+  </table>
 </div>
-</div>
+

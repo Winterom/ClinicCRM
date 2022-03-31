@@ -1,6 +1,6 @@
 package auth_service.service;
 
-import auth_service.entityes.AppRole;
+import auth_service.entities.AppRole;
 import auth_service.exception.AppRoleNotFoundException;
 import auth_service.repositoryes.RoleRepository;
 import org.springframework.stereotype.Service;

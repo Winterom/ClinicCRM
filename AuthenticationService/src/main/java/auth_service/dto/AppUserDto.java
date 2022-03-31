@@ -1,7 +1,7 @@
 package auth_service.dto;
 
 
-import auth_service.entityes.AppUser;
+import auth_service.entities.AppUser;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
@@ -93,7 +93,7 @@ public enum AppUserDto {;
 
     }
     public enum Response{;
-        public static class userTable implements Id, Firstname,Surname,Lastname, Email, Telephone, IsLocked, IsEmailVerified, PhoneNumberVerified {
+        public static class userTable implements Id, Firstname,Surname,Lastname, Email, Telephone, IsLocked {
             private Long id;
             private String firstname;
             private String surname;
@@ -101,8 +101,6 @@ public enum AppUserDto {;
             private String email;
             private String phoneNumber;
             private Boolean isLocked;
-            private Boolean isEmailVerified;
-            private Boolean isPhoneNumberVerified;
 
             public userTable() {
             }
@@ -115,13 +113,10 @@ public enum AppUserDto {;
                 this.email = usr.getEmail();
                 this.phoneNumber = usr.getPhoneNumber();
                 this.isLocked = usr.getLocked();
-                this.isEmailVerified = usr.getEmailVerified();
-                this.isPhoneNumberVerified = usr.getPhoneVerified();
             }
 
             public userTable(Long id, String firstname, String surname, String lastname,
-                             String email, String phoneNumber, Boolean isLocked, Boolean isEmailVerified,
-                             Boolean isPhoneNumberVerified) {
+                             String email, String phoneNumber, Boolean isLocked) {
                 this.id = id;
                 this.firstname = firstname;
                 this.surname = surname;
@@ -129,8 +124,6 @@ public enum AppUserDto {;
                 this.email = email;
                 this.phoneNumber = phoneNumber;
                 this.isLocked = isLocked;
-                this.isEmailVerified = isEmailVerified;
-                this.isPhoneNumberVerified = isPhoneNumberVerified;
             }
 
             @Override
@@ -168,15 +161,6 @@ public enum AppUserDto {;
                 return this.isLocked;
             }
 
-            @Override
-            public Boolean isEmailVerified() {
-                return this.isEmailVerified;
-            }
-
-            @Override
-            public Boolean isTelephoneVerified() {
-                return this.isPhoneNumberVerified;
-            }
         }
 
     }

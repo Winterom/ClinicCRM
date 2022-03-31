@@ -1,4 +1,4 @@
-package auth_service.entityes;
+package auth_service.entities;
 
 public enum AppAuthoritiesEnum {
     ADMIN_USER_READ,

@@ -1,4 +1,4 @@
-package auth_service.entityes;
+package auth_service.entities;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;

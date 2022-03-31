@@ -6,10 +6,10 @@ import {AbstractControl, FormBuilder, FormGroup, Validators} from "@angular/form
 
 @Component({
   selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  templateUrl: './sign-in.component.html',
+  styleUrls: ['./sign-in.component.css']
 })
-export class LoginComponent implements OnInit {
+export class SignInComponent implements OnInit {
   form: FormGroup;
   isLoggedIn = false;
   isLoginFailed = false;

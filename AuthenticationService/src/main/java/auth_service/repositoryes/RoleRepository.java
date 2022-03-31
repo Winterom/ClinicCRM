@@ -1,6 +1,6 @@
 package auth_service.repositoryes;
 
-import auth_service.entityes.AppRole;
+import auth_service.entities.AppRole;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.Optional;
