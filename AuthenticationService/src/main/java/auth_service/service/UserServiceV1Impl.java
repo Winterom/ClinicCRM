@@ -29,13 +29,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
-import java.time.LocalDateTime;;
+import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
 
-@Service
+@Service("SimpleUserService")
 public class UserServiceV1Impl implements UserService {
     private final UserRepository userRepository;
     private final JwtTokenUtils jwtTokenUtils;
@@ -74,7 +75,7 @@ public class UserServiceV1Impl implements UserService {
     }
 
     @Override
-    public AppUser registerUser(AppUserDto.Request.Create userDto) {
+    public AppUser registerUser(AppUserDto.Request.Create userDto,HttpServletRequest request) {
         if (userRepository.getAppUserByEmailAndIsLockedFalse(userDto.getEmail()).isPresent()){
             throw new EmailExistsException(userDto.getEmail());
         }
@@ -105,17 +106,17 @@ public class UserServiceV1Impl implements UserService {
     }
 
     @Override
-    public Boolean checkEmail(String email){
+    public Boolean checkEmail(String email, HttpServletRequest request){
         return userRepository.getAppUsersByEmail(email).isEmpty();
     }
 
     @Override
-    public Boolean checkPhoneNumber(String phoneNumber){
+    public Boolean checkPhoneNumber(String phoneNumber,HttpServletRequest request){
         return userRepository.getAppUserByPhoneNumber(phoneNumber).isEmpty();
     }
 
     @Override
-    public PaginationEntity<AppUserDto.Response.userTable> getAllUser(Integer page, Integer itemInPage, String sortField, boolean directSort, String searchField, String searchValue) {
+    public PaginationEntity<AppUserDto.Response.userTable> getAllUser(Integer page, Integer itemInPage, String sortField, boolean directSort, String searchField, String searchValue,HttpServletRequest request) {
         /*ASC по возрастанию Desc убывание*/
         Sort.Direction direction =Sort.Direction.ASC;
         if (!directSort){

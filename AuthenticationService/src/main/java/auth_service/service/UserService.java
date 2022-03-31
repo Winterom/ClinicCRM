@@ -8,14 +8,14 @@ import auth_service.entities.AppUser;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import javax.servlet.http.HttpServletRequest;
 
 
 @Service
 public interface UserService extends UserDetailsService {
    JwtDto.Response generateAccessToken(JwtDto.Request authRequest);
-   AppUser registerUser(AppUserDto.Request.Create userDto);
-   Boolean checkEmail(String email);
-   Boolean checkPhoneNumber(String email);
-   PaginationEntity<AppUserDto.Response.userTable> getAllUser(Integer page, Integer itemInPage, String sortField, boolean directSort, String searchField, String searchValue);
+   AppUser registerUser(AppUserDto.Request.Create userDto, HttpServletRequest request);
+   Boolean checkEmail(String email,HttpServletRequest request);
+   Boolean checkPhoneNumber(String phoneNumber,HttpServletRequest request);
+   PaginationEntity<AppUserDto.Response.userTable> getAllUser(Integer page, Integer itemInPage, String sortField, boolean directSort, String searchField, String searchValue,HttpServletRequest request);
 }

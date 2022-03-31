@@ -6,10 +6,12 @@ import auth_service.entities.AppUser;
 import auth_service.service.UserService;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import javax.servlet.http.HttpServletRequest;
+
 
 @RestController
 @RequestMapping("/api/v1")
@@ -17,13 +19,13 @@ import java.util.List;
 public class UsersControllerV1 {
     private final UserService userService;
 
-    public UsersControllerV1(UserService userService) {
+    public UsersControllerV1(@Qualifier("UserServiceDecoration") UserService userService) {
         this.userService = userService;
     }
-    @PreAuthorize("hasAuthority(T(auth_service.entities.AppAuthoritiesEnum).ADMIN_USER_WRITE)")
+    /*@PreAuthorize("hasAuthority(T(auth_service.entities.AppAuthoritiesEnum).ADMIN_USER_WRITE)")*/
     @PostMapping("/registration")
-    public AppUser registerAppUser(@RequestBody AppUserDto.Request.Create userDto){
-        return userService.registerUser(userDto);
+    public AppUser registerAppUser(@RequestBody AppUserDto.Request.Create userDto,HttpServletRequest request){
+        return userService.registerUser(userDto,request);
     }
 
 
@@ -36,9 +38,8 @@ public class UsersControllerV1 {
             @Parameter(description = "Поле по которому происходит сортировка")@RequestParam(name = "sort_field", required = false) String sortField,
             @Parameter(description = "Сортировка по возрастанию true, иначе false")@RequestParam(name = "directSort", defaultValue = "false") boolean directSort,
             @Parameter(description = "Поле по которому происходит поиск")@RequestParam(name = "search_field", required = false) String searchField,
-            @Parameter(description = "Искомое значение")@RequestParam(name = "search_value", required = false) String searchValue
-    ){
-        System.out.println(page+" "+ itemInPage+" "+sortField+" "+ directSort+searchField+" "+searchValue);
-        return userService.getAllUser(page,itemInPage,sortField, directSort,searchField,searchValue);
+            @Parameter(description = "Искомое значение")@RequestParam(name = "search_value", required = false) String searchValue,
+        HttpServletRequest request){
+        return userService.getAllUser(page,itemInPage,sortField, directSort,searchField,searchValue,request);
     }
 }
