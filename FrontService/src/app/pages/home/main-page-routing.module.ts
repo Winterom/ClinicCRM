@@ -7,6 +7,7 @@ import {UsersComponent} from "./admin/users/users.component";
 import {AuthoritiesComponent} from "./admin/authorities/authorities.component";
 import {LoggingComponent} from "./admin/logging/logging.component";
 import {UserByIdComponent} from "./admin/users/user-by-id/user-by-id.component";
+import {AuthInterceptor} from "../../helpers/auth.interceptor";
 
 
 const mainPageRoutes: Routes =[

@@ -1,11 +1,15 @@
 <h2>Список пользователей</h2>
 <div class="container">
+
   <div class="filters">
-    <label for="search_form">Фильтры</label>
+    <details>
+      <summary>
+    Фильтры
+      </summary>
     <form id="search_form" [formGroup]="form" (ngSubmit)="onSubmit()">
       <div class="form_item">
         <em>Количество на странице:</em>
-        <select class="select" formControlName="sizeValueControl" >
+        <select class="select" formControlName="sizeValueControl">
           <option *ngFor="let value of sizeValue" [ngValue]="value">{{value.value}}</option>
         </select>
       </div>
@@ -29,30 +33,41 @@
       <button (click)="onReset()">Очистить</button>
       <button type="submit">Применить</button>
     </form>
+    </details>
   </div>
-  <table>
-    <thead>
-    <tr>
-      <th>ID</th>
-      <th>Фамилия</th>
-      <th>Имя</th>
-      <th>Отчество</th>
-      <th>Email</th>
-      <th>Телефон</th>
-      <th>Блокировка</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr *ngFor="let item of usersArray" (click)="getUserById(item.id)">
-      <td class="td_id">{{item.id}}</td>
-      <td class="td_fio">{{item.surname}}</td>
-      <td class="td_fio">{{item.firstname}}</td>
-      <td class="td_fio">{{item.lastname}}</td>
-      <td class="td_email">{{item.email}}</td>
-      <td class="td_phone">{{item.phoneNumber}}</td>
-      <td class="td_lock">{{item.isLocked}}</td>
-    </tr>
-    </tbody>
-  </table>
+  <div class="table-scroll" >
+    <table id="header_table">
+      <thead>
+      <tr>
+        <th class="td_id">ID</th>
+        <th class="td_fio">Фамилия</th>
+        <th class="td_fio">Имя</th>
+        <th class="td_fio">Отчество</th>
+        <th class="td_email">Email</th>
+        <th class="td_phone">Телефон</th>
+        <th class="td_status">Статус</th>
+      </tr>
+      </thead>
+    </table>
+
+    <div class="table-scroll-body">
+      <table id="body-table">
+        <tbody>
+        <tr *ngFor="let item of usersArray" (click)="getUserById(item.id)">
+          <td class="td_id">{{item.id}}</td>
+          <td class="td_fio">{{item.surname}}</td>
+          <td class="td_fio">{{item.firstname}}</td>
+          <td class="td_fio">{{item.lastname}}</td>
+          <td class="td_email">{{item.email}}</td>
+          <td class="td_phone">{{item.phoneNumber}}</td>
+          <td class="td_status" *ngIf="item.status==='ACTIVE'">Активно</td>
+          <td class="td_status deleted" *ngIf="item.status==='DELETED'">Удалено</td>
+          <td class="td_status" *ngIf="item.status==='BANNED'">Заблокировано</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <app-pagination></app-pagination>
 </div>
 

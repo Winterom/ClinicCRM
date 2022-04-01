@@ -1,64 +1,40 @@
 package auth_service.entities;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
-import java.util.Collection;
 
+
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "authorities")
 @Entity
 public class AppAuthority implements GrantedAuthority {
     @Id
+    @Setter
+    @Getter
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
 
+    @Setter
     @Column(name = "authority")
     @Enumerated(EnumType.STRING)
     private AppAuthoritiesEnum authority;
 
-    @Column(name = "description")
-    private String description;
 
+    @Setter @Getter
+    @ManyToOne
+    @JoinColumn(name = "role",referencedColumnName = "id",nullable = false)
+    private AppRole roles;
 
-    @ManyToMany
-    @JoinTable(name = "roles_authorities",
-            joinColumns = @JoinColumn(name = "authority_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Collection<AppRole> roles;
-
-    public AppAuthority(AppAuthoritiesEnum authorities) {
-        this.authority = authorities;
-    }
-
-    public AppAuthority() {
-    }
-
-    public void setAuthority(AppAuthoritiesEnum authorities) {
-        this.authority = authorities;
-    }
-
-    public Collection<AppRole> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(Collection<AppRole> roles) {
-        this.roles = roles;
-    }
 
     @Override
     public String getAuthority() {
         return this.authority.name();
     }
 
-    public Long getId() {
-        return id;
-    }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    @Override
-    public String toString() {
-        return this.authority.name();
-    }
 }

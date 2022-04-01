@@ -26,7 +26,7 @@ export class UsersComponent  implements OnInit{
     {id: 'lastname', value:'Отчество'},
     {id: 'email', value:'Email'},
     {id: 'phone_number', value:'Телефон'},
-    {id: 'locked', value:'Блокировка'}
+    {id: 'status', value:'Статус'}
   ];
   usersArray: any[] = [];
   totalPage:number=0;

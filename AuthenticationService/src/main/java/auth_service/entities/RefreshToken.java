@@ -1,65 +1,43 @@
 package auth_service.entities;
 
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "refresh_token_storage")
 public class RefreshToken {
-
+    @Setter @Getter
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
 
+    @Setter
+    @Getter
     @OneToOne
     @JoinColumn(name = "app_user_id",referencedColumnName = "id")
     private AppUser appUser;
 
+    @Setter @Getter
     @Column(name = "token")
     private String token;
 
+    @Setter @Getter
     @Column(name = "expired_date")
     private LocalDateTime expiredDateTime;
 
+    @Setter @Getter
     @CreationTimestamp
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
-    public RefreshToken() {
-    }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public AppUser getAppUser() {
-        return appUser;
-    }
-
-    public void setAppUser(AppUser appUser) {
-        this.appUser = appUser;
-    }
-
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
-    }
-
-    public LocalDateTime getExpiredDateTime() {
-        return expiredDateTime;
-    }
-
-    public void setExpiredDateTime(LocalDateTime expiredDateTime) {
-        this.expiredDateTime = expiredDateTime;
-    }
 }

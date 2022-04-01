@@ -2,63 +2,91 @@ package auth_service.dto;
 
 
 import auth_service.entities.AppUser;
+import auth_service.entities.UserStatusEnum;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
 import java.util.List;
 
-public enum AppUserDto {;
-    private interface Id { @Positive Long getId(); }
-    private interface Firstname { @Size(min = 3,max = 50) String getFirstname(); }
-    private interface Surname { @Size(max = 50) String getSurname(); }
-    private interface Lastname { @Size(min = 3,max = 50) String getLastname(); }
-    private interface Password { @NotBlank String getPassword(); }
-    private interface Email { @javax.validation.constraints.Email String getEmail(); }
-    private interface Telephone { @Size(min=6, max = 25) String getPhoneNumber(); }
-    private interface IsLocked {Boolean isLocked(); }
-    private interface IsEmailVerified {Boolean isEmailVerified(); }
-    private interface PhoneNumberVerified {Boolean isTelephoneVerified(); }
+public enum AppUserDto {
+    ;
+
+    private interface Id {
+        @Positive Long getId();
+    }
+
+    private interface Firstname {
+        @Size(min = 3, max = 50) String getFirstname();
+    }
+
+    private interface Surname {
+        @Size(max = 50) String getSurname();
+    }
+
+    private interface Lastname {
+        @Size(min = 3, max = 50) String getLastname();
+    }
+
+    private interface Password {
+        @NotBlank String getPassword();
+    }
+
+    private interface Email {
+        @javax.validation.constraints.Email String getEmail();
+    }
+
+    private interface Telephone {
+        @Size(min = 6, max = 25) String getPhoneNumber();
+    }
+
+    private interface Status {
+        UserStatusEnum getStatus();
+    }
+
+    private interface IsEmailVerified {
+        Boolean isEmailVerified();
+    }
+
+    private interface PhoneNumberVerified {
+        Boolean isTelephoneVerified();
+    }
+
     private interface Roles {
-        List<RolesDto> getRoles();}
+        List<RolesDto> getRoles();
+    }
 
-    public enum Request{;
-        public static class Create implements Firstname,Surname,Lastname,Password,Email,Telephone{
+    public enum Request {
+        ;
+        @NoArgsConstructor
+        public static class CreateOrUpdate implements Firstname, Surname, Lastname, Password, Email, Telephone, Status {
+            @Setter
             private String firstname;
+            @Setter
             private String surname;
+            @Setter
             private String lastname;
+            @Setter
             private String password;
+            @Setter
             private String email;
+            @Setter
             private String phoneNumber;
+            @Setter
+            private UserStatusEnum status;
 
-            public Create() {
-            }
 
-            public Create(String firstname, String surname, String lastname, String password, String email, String phoneNumber) {
+            public CreateOrUpdate(String firstname, String surname, String lastname, String password, String email, String phoneNumber, UserStatusEnum status) {
                 this.firstname = firstname;
                 this.surname = surname;
                 this.lastname = lastname;
                 this.password = password;
                 this.email = email;
                 this.phoneNumber = phoneNumber;
+                this.status = status;
             }
-
-            public void setFirstname(String firstname) {
-                this.firstname = firstname;
-            }
-
-            public void setPassword(String password) {
-                this.password = password;
-            }
-
-            public void setEmail(String email) {
-                this.email = email;
-            }
-
-            public void setPhoneNumber(String phoneNumber) {
-                this.phoneNumber = phoneNumber;
-            }
-
 
             @Override
             public String getFirstname() {
@@ -89,41 +117,54 @@ public enum AppUserDto {;
             public String getLastname() {
                 return this.lastname;
             }
+
+            @Override
+            public UserStatusEnum getStatus() {
+                return this.status;
+            }
         }
 
     }
-    public enum Response{;
-        public static class userTable implements Id, Firstname,Surname,Lastname, Email, Telephone, IsLocked {
+
+    public enum Response {
+        ;
+        @NoArgsConstructor
+        public static class userTable implements Id, Firstname, Surname, Lastname, Email, Telephone, Status {
+            @Setter
             private Long id;
+            @Setter
             private String firstname;
+            @Setter
             private String surname;
+            @Setter
             private String lastname;
+            @Setter
             private String email;
+            @Setter
             private String phoneNumber;
-            private Boolean isLocked;
+            @Setter
+            private UserStatusEnum status;
 
-            public userTable() {
-            }
 
-            public userTable(AppUser usr){
+            public userTable(AppUser usr) {
                 this.id = usr.getId();
                 this.firstname = usr.getFirstname();
                 this.surname = usr.getSurname();
                 this.lastname = usr.getLastname();
                 this.email = usr.getEmail();
                 this.phoneNumber = usr.getPhoneNumber();
-                this.isLocked = usr.getLocked();
+                this.status = usr.getStatus();
             }
 
             public userTable(Long id, String firstname, String surname, String lastname,
-                             String email, String phoneNumber, Boolean isLocked) {
+                             String email, String phoneNumber, UserStatusEnum status) {
                 this.id = id;
                 this.firstname = firstname;
                 this.surname = surname;
                 this.lastname = lastname;
                 this.email = email;
                 this.phoneNumber = phoneNumber;
-                this.isLocked = isLocked;
+                this.status = status;
             }
 
             @Override
@@ -157,12 +198,12 @@ public enum AppUserDto {;
             }
 
             @Override
-            public Boolean isLocked() {
-                return this.isLocked;
+            public UserStatusEnum getStatus() {
+                return this.status;
+
             }
 
         }
 
     }
-
 }

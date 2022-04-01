@@ -2,12 +2,10 @@ package auth_service.controller;
 
 import auth_service.dto.AppUserDto;
 import auth_service.dto.PaginationEntity;
-import auth_service.entities.AppUser;
 import auth_service.service.UserService;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -19,13 +17,18 @@ import javax.servlet.http.HttpServletRequest;
 public class UsersControllerV1 {
     private final UserService userService;
 
-    public UsersControllerV1(@Qualifier("UserServiceDecoration") UserService userService) {
+    public UsersControllerV1(UserService userService) {
         this.userService = userService;
     }
     /*@PreAuthorize("hasAuthority(T(auth_service.entities.AppAuthoritiesEnum).ADMIN_USER_WRITE)")*/
     @PostMapping("/registration")
-    public AppUser registerAppUser(@RequestBody AppUserDto.Request.Create userDto,HttpServletRequest request){
-        return userService.registerUser(userDto,request);
+    public void registerAppUser(@RequestBody AppUserDto.Request.CreateOrUpdate userDto, HttpServletRequest request){
+        userService.registerUser(userDto,request);
+    }
+
+    @PostMapping("/update")
+    public void updateAppUser(@RequestBody AppUserDto.Request.CreateOrUpdate userDto, HttpServletRequest request){
+
     }
 
 

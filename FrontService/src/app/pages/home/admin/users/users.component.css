@@ -1,5 +1,7 @@
 h2{
   text-align: center;
+  margin: 0;
+  padding: 0;
 }
 
 .container{
@@ -8,9 +10,22 @@ h2{
   flex-direction: column;
 
 }
+details summary::-webkit-details-marker {
+  display: none
+}
+details > summary {
+  width: 5rem;
+  list-style: none;
+  font-size: 1rem;
+  font-weight: bold;
+  border: 1px solid gray;
+  border-radius: 4px;
+  background: #ADD8E6 !important;;
+  padding: 0.5rem 2rem;
+  margin-bottom: 1rem;
+  cursor: pointer;
+}
 form{
-  position: sticky;
-  top: 0;
   background: #f7f7f7;
   border: 1px solid darkgray;
   border-radius: 0.5rem;
@@ -107,19 +122,47 @@ input[type=checkbox]:checked:after {
   border-radius: 0.25rem;
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
-table{
-  border-collapse: collapse;
-  border: 1px solid grey;
 
+.table-scroll table{
+  width: 100%;
+  table-layout: fixed;
+  border: none;
 }
+.table-scroll thead th{
+  border: none;
+  border-left: 1px solid #87CEFA;
+  border-right: 1px solid #87CEFA;
+}
+
+#header_table{
+  border-spacing: 0;
+}
+#header_table th{
+  height: 2.5rem;
+}
+.table-scroll-body{
+  border-collapse: collapse;
+  border-bottom: 1px solid grey;
+  height: 34vh;
+  overflow-x: auto;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+}
+::-webkit-scrollbar-thumb {
+  box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+}
+
 thead{
   font-weight: bold;
   background: #87CEFA;
   font-size: 1.1rem;
 }
-th{
-  height: 2rem;
-}
+
 table tbody tr:nth-child(3n+1){
   background: #f2fff5;
 }
@@ -137,12 +180,8 @@ tbody{
   cursor: pointer;
 }
 
-th{
-  border: 1px solid grey;
-}
 
 td{
-  border: 1px solid grey;
   height: 3rem;
 }
 .td_id{
@@ -163,7 +202,12 @@ td{
   width: 10rem;
 }
 
-.td_lock{
+.td_status{
+  text-align: center;
   width: 10rem;
+}
+.deleted{
+  color: red;
+  font-weight: bold;
 }
 

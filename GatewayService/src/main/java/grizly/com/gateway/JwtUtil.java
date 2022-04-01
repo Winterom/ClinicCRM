@@ -20,6 +20,7 @@ public class JwtUtil {
     }
 
     private boolean isTokenExpired(String token) {
+        System.out.println("проверка на expired");
         return this.getAllClaimsFromToken(token).getExpiration().before(new Date());
     }
 

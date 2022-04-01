@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthControllerV1 {
     private final UserService userService;
 
-    public AuthControllerV1(@Qualifier("UserServiceDecoration")UserService userService) {
+    public AuthControllerV1(UserService userService) {
         this.userService = userService;
     }
     @Operation(

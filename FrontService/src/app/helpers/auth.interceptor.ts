@@ -11,15 +11,20 @@ export class AuthInterceptor implements HttpInterceptor {
   constructor(private user: UserAppService) { }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    let authReq = req;
+    console.log('мы в интерцкпторе')
+    let authReq: HttpRequest<any>;
     const token = this.user.getToken();
+    let tok:string;
     if (token != null) {
-      authReq = req.clone({ headers: req.headers.set(TOKEN_HEADER_KEY, 'Bearer ' + token) });
+      console.log('токен ОК')
+      tok = 'Bearer ' + token;
+    }else {
+      console.log('токен не ОК')
+      tok='';
     }
+    authReq = req.clone({ headers: req.headers.set(TOKEN_HEADER_KEY, tok) });
     return next.handle(authReq);
   }
 }
 
-export const authInterceptorProviders = [
-  { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
-];
+

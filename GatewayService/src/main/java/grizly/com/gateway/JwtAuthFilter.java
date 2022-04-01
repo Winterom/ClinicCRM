@@ -1,6 +1,7 @@
 package grizly.com.gateway;
 
 import io.jsonwebtoken.Claims;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
 import org.springframework.http.HttpStatus;
@@ -45,6 +46,7 @@ public class JwtAuthFilter extends AbstractGatewayFilterFactory<JwtAuthFilter.Co
     }
 
     private String getAuthHeader(ServerHttpRequest request) {
+        System.out.println("filter vse ok header");
         return request.getHeaders().getOrEmpty("Authorization").get(0).substring(7);
     }
 
@@ -60,6 +62,7 @@ public class JwtAuthFilter extends AbstractGatewayFilterFactory<JwtAuthFilter.Co
 
     private void populateRequestWithHeaders(ServerWebExchange exchange, String token) {
         Claims claims = jwtUtil.getAllClaimsFromToken(token);
+        System.out.println("filter vse ok");
         exchange.getRequest().mutate()
                 .header("email", claims.getSubject())
                 .header("roles", String.valueOf(claims.get("roles")))
