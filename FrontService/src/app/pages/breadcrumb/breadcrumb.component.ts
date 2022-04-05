@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component} from '@angular/core';
 import {Breadcrumb, BreadcrumbService} from "../../service/breadcrumb.service";
 import {Observable} from "rxjs";
 

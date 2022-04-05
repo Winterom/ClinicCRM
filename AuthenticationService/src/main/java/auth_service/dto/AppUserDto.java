@@ -3,6 +3,8 @@ package auth_service.dto;
 
 import auth_service.entities.AppUser;
 import auth_service.entities.UserStatusEnum;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
@@ -10,6 +12,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
 import java.util.List;
+import java.util.Set;
 
 public enum AppUserDto {
     ;
@@ -124,6 +127,27 @@ public enum AppUserDto {
             }
         }
 
+
+
+        @NoArgsConstructor
+        @AllArgsConstructor
+        public static class GetAllUserWithFilters{
+            @Setter@Getter
+            private Integer page;
+            @Setter@Getter
+            private Integer itemInPage;
+            @Setter@Getter
+            private String sortField;
+            @Setter@Getter
+            private Boolean directSort;
+            @Setter@Getter
+            private String searchField;
+            @Setter@Getter
+            private String searchValue;
+            @Setter@Getter
+            private Set<UserStatusEnum> status;
+
+        }
     }
 
     public enum Response {
@@ -206,4 +230,6 @@ public enum AppUserDto {
         }
 
     }
+
+
 }

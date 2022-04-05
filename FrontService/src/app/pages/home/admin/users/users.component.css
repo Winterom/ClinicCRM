@@ -48,7 +48,6 @@ form em{
 }
 form button{
   padding: 0.5em 1em;
-  margin-top: 1em;
   margin-right: 2em;
   font-size: inherit;
   cursor: pointer;
@@ -61,7 +60,10 @@ span{
 .form_item{
   margin-bottom: 0.3em;
 }
-
+.group_in_form{
+  display: flex;
+  justify-content: space-between;
+}
 select {
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -121,6 +123,30 @@ input[type=checkbox]:checked:after {
   border: 1px solid #bdbdbd;
   border-radius: 0.25rem;
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+.status_select{
+  margin-top: 2vh;
+  margin-right: 3vw;
+  border: 1px solid black;
+  border-radius: 0.5rem;
+  padding-right: 1vw;
+  display: flex;
+  justify-content: space-between;
+  padding-top: 1vh;
+}
+.status_select_label{
+  display: flex;
+  flex-direction: column;
+}
+.status_select_label em{
+  margin-bottom: 1vh;
+}
+.status_select_checkbox{
+  display: flex;
+  flex-direction: column;
+}
+.status_select_checkbox input{
+  margin-bottom: 1vh;
 }
 
 .table-scroll table{

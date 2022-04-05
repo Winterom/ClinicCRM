@@ -4,38 +4,58 @@
   <div class="filters">
     <details>
       <summary>
-    Фильтры
+        Фильтры
       </summary>
-    <form id="search_form" [formGroup]="form" (ngSubmit)="onSubmit()">
-      <div class="form_item">
-        <em>Количество на странице:</em>
-        <select class="select" formControlName="sizeValueControl">
-          <option *ngFor="let value of sizeValue" [ngValue]="value">{{value.value}}</option>
-        </select>
-      </div>
-      <div class="form_item">
-        <em>Сортировать по полю:</em>
-        <select class="select" formControlName="fieldSortControl">
-          <option *ngFor="let field of fieldValue" [ngValue]="field">{{field.value}}</option>
-        </select>
-        <em>По возрастанию: </em>
-        <input formControlName="checkBoxSortedControl" class="custom-checkbox" type="checkbox" id="checkbox" checked>
-      </div>
-      <div class="form_item">
-        <em>Поиск по полю</em>
-        <select class="select" formControlName="fieldSearchControl">
-          <option *ngFor="let field2 of fieldValue" [ngValue]="field2">{{field2.value}}</option>
-        </select>
-        <input formControlName="valueSearchControl" type="text" class="text-field__input"
-               placeholder="Введите значение для поиска">
-        <span>Минимум три символа</span>
-      </div>
-      <button (click)="onReset()">Очистить</button>
-      <button type="submit">Применить</button>
-    </form>
+      <form id="search_form" [formGroup]="form" (ngSubmit)="onSubmit()">
+        <div class="group_in_form">
+          <div class="left_side">
+            <div class="form_item">
+              <em>Количество на странице:</em>
+              <select class="select" formControlName="sizeValueControl">
+                <option *ngFor="let value of sizeValue" [ngValue]="value">{{value.value}}</option>
+              </select>
+            </div>
+            <div class="form_item">
+              <em>Сортировать по полю:</em>
+              <select class="select" formControlName="fieldSortControl">
+                <option *ngFor="let field of fieldValue" [ngValue]="field">{{field.value}}</option>
+              </select>
+              <em>По возрастанию: </em>
+              <input formControlName="checkBoxSortedControl" class="custom-checkbox" type="checkbox" checked>
+            </div>
+            <div class="form_item">
+              <em>Поиск по полю</em>
+              <select class="select" formControlName="fieldSearchControl">
+                <option *ngFor="let field2 of fieldValue" [ngValue]="field2">{{field2.value}}</option>
+              </select>
+              <input formControlName="valueSearchControl" type="text" class="text-field__input"
+                     placeholder="Введите значение для поиска">
+              <span>Минимум три символа</span>
+            </div>
+          </div>
+          <div class="status_select_box">
+            <span>Фильтр по статусу учетной записи</span>
+            <div class="status_select">
+
+              <div class="status_select_label">
+                <em>Статус "Активно": </em>
+                <em>Статус "Удалено" </em>
+                <em>Статус "Заблокировано" </em>
+              </div>
+              <div class="status_select_checkbox">
+                <input formControlName="checkBoxActiveControl" class="custom-checkbox" type="checkbox" checked>
+                <input formControlName="checkBoxDeletedControl" class="custom-checkbox" type="checkbox" checked>
+                <input formControlName="checkBoxBannedControl" class="custom-checkbox" type="checkbox" checked>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button (click)="onReset()">Очистить</button>
+        <button type="submit">Применить</button>
+      </form>
     </details>
   </div>
-  <div class="table-scroll" >
+  <div class="table-scroll">
     <table id="header_table">
       <thead>
       <tr>
@@ -68,6 +88,6 @@
       </table>
     </div>
   </div>
-  <app-pagination></app-pagination>
+  <app-pagination [page]="page"></app-pagination>
 </div>
 

@@ -4,11 +4,12 @@ package auth_service.service;
 import auth_service.dto.AppUserDto;
 import auth_service.dto.JwtDto;
 import auth_service.dto.PaginationEntity;
-import auth_service.entities.AppUser;
+import auth_service.entities.UserStatusEnum;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Set;
 
 
 @Service
@@ -18,6 +19,6 @@ public interface UserService extends UserDetailsService {
    Boolean checkEmail(String email,HttpServletRequest request);
    Boolean checkPhoneNumber(String phoneNumber,HttpServletRequest request);
    PaginationEntity<AppUserDto.Response.userTable> getAllUser(Integer page, Integer itemInPage, String sortField,
-                                                              boolean directSort, String searchField, String searchValue,HttpServletRequest request);
+                                                              boolean directSort, String searchField, String searchValue, Set<UserStatusEnum> status, HttpServletRequest request);
    void updateAppUser(AppUserDto.Request.CreateOrUpdate userDto, HttpServletRequest request);
 }

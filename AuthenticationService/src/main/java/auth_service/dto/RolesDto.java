@@ -1,14 +1,10 @@
 package auth_service.dto;
 
 import auth_service.entities.AppAuthority;
-import auth_service.entities.AppUser;
 
-import javax.persistence.Column;
-import javax.persistence.ManyToMany;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
-import java.util.Collection;
 import java.util.List;
 
 public enum RolesDto {;

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {BehaviorSubject, filter} from "rxjs";
 import {ActivatedRouteSnapshot, Data, NavigationEnd, Router} from "@angular/router";
 

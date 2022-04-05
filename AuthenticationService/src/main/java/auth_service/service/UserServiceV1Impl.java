@@ -3,7 +3,9 @@ package auth_service.service;
 import auth_service.dto.AppUserDto;
 import auth_service.dto.JwtDto;
 import auth_service.dto.PaginationEntity;
-import auth_service.entities.*;
+import auth_service.entities.AppAuthoritiesEnum;
+import auth_service.entities.AppUser;
+import auth_service.entities.UserStatusEnum;
 import auth_service.exception.BadPasswordOrUsernameException;
 import auth_service.exception.EmailExistsException;
 import auth_service.exception.PhoneNumberExistsException;
@@ -28,12 +30,14 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import javax.persistence.EntityManager;
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 
@@ -131,7 +135,9 @@ public class UserServiceV1Impl implements UserService {
     }
 
     @Override
-    public PaginationEntity<AppUserDto.Response.userTable> getAllUser(Integer page, Integer itemInPage, String sortField, boolean directSort, String searchField, String searchValue,HttpServletRequest request) {
+    public PaginationEntity<AppUserDto.Response.userTable> getAllUser(Integer page, Integer itemInPage, String sortField, boolean directSort,
+                                                                      String searchField, String searchValue, Set<UserStatusEnum> status,
+                                                                      HttpServletRequest request) {
         if (isNonHasAuthority(AppAuthoritiesEnum.ADMIN_USER_WRITE, request)){
             throw new AccessDeniedException("Доступ запрещен!");
         }
@@ -156,7 +162,8 @@ public class UserServiceV1Impl implements UserService {
         }else{
             spec = Specification.where(null);
         }
-        Page<AppUser> pageable = userRepository.findAll(spec, PageRequest.of(page - 1, itemInPage,sort));
+        Specification<AppUser> specStatus = Specification.where(AppUserSpecification.statusValue(status));
+        Page<AppUser> pageable = userRepository.findAll(spec.and(specStatus), PageRequest.of(page - 1, itemInPage,sort));
         List<AppUserDto.Response.userTable> result = pageable.getContent().stream().map(AppUserDto.Response.userTable::new).collect(Collectors.toList());
         return new PaginationEntity<>(pageable.getTotalPages(), page, result);
     }

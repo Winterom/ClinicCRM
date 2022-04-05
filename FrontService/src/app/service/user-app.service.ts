@@ -39,10 +39,7 @@ export class UserAppService {
     }).join(''));
     let tok = JSON.parse(jsonPayload);
     let currentTime: number = new Date().getTime() / 1000;
-    console.log("в токене число: "+ tok.exp)
-    console.log("сейчас: "+ currentTime)
     if (currentTime>tok.exp){
-      console.log("Token is expired!!!");
       window.localStorage.removeItem(TOKEN_KEY);
       return null;
     }

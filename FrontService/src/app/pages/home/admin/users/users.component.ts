@@ -1,9 +1,8 @@
-import { Component, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {DataService} from "../../../../service/data.service";
 import {AbstractControl, FormBuilder, FormGroup} from "@angular/forms";
-import {Router, ActivatedRoute} from "@angular/router";
-
-
+import {ActivatedRoute, Router} from "@angular/router";
+import {Page} from "../../../../helpers/message";
 
 
 @Component({
@@ -26,24 +25,30 @@ export class UsersComponent  implements OnInit{
     {id: 'lastname', value:'Отчество'},
     {id: 'email', value:'Email'},
     {id: 'phone_number', value:'Телефон'},
-    {id: 'status', value:'Статус'}
   ];
   usersArray: any[] = [];
-  totalPage:number=0;
-  currentPage:number=1;
+  page: Page;
 
   constructor(private formBuilder: FormBuilder,private dataService:DataService, private router:Router,private route: ActivatedRoute) {
+    this.page = {totalPage:1,currentPage:1};
     this.form=this.formBuilder.group({
       sizeValueControl:[this.sizeValue[0]],
       fieldSortControl:[this.fieldValue[0]],
       checkBoxSortedControl:[true],
       fieldSearchControl:[this.fieldValue[0]],
-      valueSearchControl:[null]
+      valueSearchControl:[null],
+      checkBoxActiveControl:[true],
+      checkBoxDeletedControl:[true],
+      checkBoxBannedControl:[true]
     });
-    this.dataService.getAllUsersPaging(this.currentPage,10,'id',true,null,null).subscribe((res: any) => {
+    let statusEnum = new Set<string>();
+      statusEnum.add('ACTIVE');
+      statusEnum.add('DELETED');
+      statusEnum.add('BANNED');
+    this.dataService.getAllUsersPaging(this.page.currentPage,10,'id',true,null,null,statusEnum).subscribe((res: any) => {
       this.usersArray = res.content;
-      this.currentPage = res.currentPage;
-      this.totalPage = res.totalPage;
+      this.page.currentPage = res.currentPage;
+      this.page.totalPage = res.totalPage;
     });
   }
 
@@ -69,11 +74,21 @@ export class UsersComponent  implements OnInit{
       searchValue=null;
       searchField=null;
     }
-    this.dataService.getAllUsersPaging(this.currentPage,sizePage,sortField,directionSort,searchField,searchValue).subscribe({next: data => {
+    let statusEnum = new Set<string>();
+    if(this.form.value.checkBoxActiveControl){
+      statusEnum.add('ACTIVE');
+    }
+    if(this.form.value.checkBoxDeletedControl){
+      statusEnum.add('DELETED');
+    }
+    if(this.form.value.checkBoxBannedControl){
+      statusEnum.add('BANNED')
+    }
+    this.dataService.getAllUsersPaging(this.page.currentPage,sizePage,sortField,directionSort,searchField,searchValue,statusEnum).subscribe({next: data => {
       console.log(data);
       this.usersArray = data.content;
-      this.currentPage = data.currentPage;
-      this.totalPage = data.totalPage;
+      this.page.currentPage = data.currentPage;
+      this.page.totalPage = data.totalPage;
     }, error:err => {
       console.log(err);
     }
@@ -85,7 +100,10 @@ export class UsersComponent  implements OnInit{
       fieldSortControl:this.fieldValue[0],
       checkBoxSortedControl:true,
       fieldSearchControl:this.fieldValue[0],
-      valueSearchControl:null
+      valueSearchControl:null,
+      checkBoxActiveControl:true,
+      checkBoxDeletedControl:true,
+      checkBoxBannedControl:true
     })
   }
   getUserById(id:number){
