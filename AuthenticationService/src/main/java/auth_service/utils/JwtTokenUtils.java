@@ -1,20 +1,16 @@
 package auth_service.utils;
 
-import io.jsonwebtoken.Claims;
+
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.security.SecureRandom;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Component
@@ -40,27 +36,20 @@ public class JwtTokenUtils {
     public JwtTokenUtils() {
     }
 
-    public String generateAccessToken(UserDetails userDetails) {
+    public String generateAccessToken(Collection< ? extends GrantedAuthority> authorities, String username) {
         Map<String, Object> claims = new HashMap<>();
-        List<String> rolesList = userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList());
+        List<String> rolesList = authorities.stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList());
         claims.put("roles", rolesList);
         Date issuedDate = new Date();
         Date expiredDate = new Date(issuedDate.getTime() + jwtAccessLifetime);
         return Jwts.builder()
                 .setClaims(claims)
                 .claim("access", true)
-                .setSubject(userDetails.getUsername())
+                .setSubject(username)
                 .setIssuedAt(issuedDate)
                 .setExpiration(expiredDate)
                 .signWith(SignatureAlgorithm.HS256, secret)
                 .compact();
-    }
-
-    public Claims getAllClaimsFromToken(String token) {
-        return Jwts.parser()
-                .setSigningKey(secret)
-                .parseClaimsJws(token)
-                .getBody();
     }
 
 

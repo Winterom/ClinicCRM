@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/FrontService/FrontService.iml" filepath="$PROJECT_DIR$/FrontService/FrontService.iml" />
       <module fileurl="file://$PROJECT_DIR$/FrontService/FrontServiceAngular.iml" filepath="$PROJECT_DIR$/FrontService/FrontServiceAngular.iml" />
     </modules>
   </component>

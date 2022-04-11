@@ -1,22 +1,17 @@
 package auth_service.entities;
 
-
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+
 
 @NoArgsConstructor
-@AllArgsConstructor
 @Table(name = "app_user")
 @Entity
 public class AppUser {
@@ -84,11 +79,5 @@ public class AppUser {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        Set<AppAuthority> authorities= new HashSet<>();
-        this.roles.forEach(x->authorities.addAll(x.getAuthorities()));
-        return authorities;
-    }
 
 }

@@ -13,4 +13,5 @@ public interface UserRepository extends CrudRepository<AppUser, Long>, JpaSpecif
     Optional<AppUser> getAppUserByEmailAndStatusEquals(String email, UserStatusEnum status);
     Optional<AppUser> getAppUsersByEmail(String email);
     Optional<AppUser> getAppUserByPhoneNumber(String phoneNumber);
+    Optional<AppUser> getAppUserById(Long id);
 }

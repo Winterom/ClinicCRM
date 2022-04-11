@@ -5,10 +5,17 @@ import {Subject} from "rxjs";
   providedIn: 'root'
 })
 export class PaginationService {
-  public page$ = new Subject<number>();
+  private _page$ = new Subject<number>();
   constructor() { }
 
-  public changePage(count: number) {
-    this.page$.next(count);
+  public changePage(count: number|undefined) {
+    if(count===undefined){
+      return;
+    }
+    this._page$.next(count);
+  }
+
+  get page$(): Subject<number> {
+    return this._page$;
   }
 }

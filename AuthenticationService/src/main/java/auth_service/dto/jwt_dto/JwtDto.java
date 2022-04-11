@@ -1,4 +1,4 @@
-package auth_service.dto;
+package auth_service.dto.jwt_dto;
 
 import javax.validation.constraints.NotBlank;
 

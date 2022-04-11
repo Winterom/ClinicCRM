@@ -48,8 +48,15 @@ public class AppExceptionHandler {
         log.error(e.getMessage(), e);
         return new ResponseEntity<>(new AppError(HttpStatus.UNAUTHORIZED.name(), e.getMessage()), HttpStatus.UNAUTHORIZED);
     }
+    @ExceptionHandler
+    public ResponseEntity<AppError> UserNotFoundException(AppUserNotFoundException e){
+        log.error(e.getMessage(), e);
+        return new ResponseEntity<>(new AppError(HttpStatus.NOT_FOUND.name(), e.getMessage()), HttpStatus.NOT_FOUND);
+    }
+
+
     @ExceptionHandler({ AccessDeniedException.class })
-    public ResponseEntity<Object> accessDeniedError(AccessDeniedException e){
+    public ResponseEntity<Object> accessDeniedException(AccessDeniedException e){
         log.error(e.getMessage(),e);
         return new ResponseEntity<>("Access denied", new HttpHeaders(), HttpStatus.FORBIDDEN);
     }
@@ -59,4 +66,5 @@ public class AppExceptionHandler {
         log.error(e.getMessage(),e);
         return new ResponseEntity<>("Не поддерживаемый запрос", new HttpHeaders(), HttpStatus.UNSUPPORTED_MEDIA_TYPE);
     }
+
 }

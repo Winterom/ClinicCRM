@@ -1,25 +1,19 @@
-package auth_service.dto;
+package auth_service.dto.user_dto;
 
 
+import auth_service.dto.role_dto.AppRoleForUserDto;
 import auth_service.entities.AppUser;
 import auth_service.entities.UserStatusEnum;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public enum AppUserDto {
     ;
-
-    private interface Id {
-        @Positive Long getId();
-    }
 
     private interface Firstname {
         @Size(min = 3, max = 50) String getFirstname();
@@ -30,7 +24,7 @@ public enum AppUserDto {
     }
 
     private interface Lastname {
-        @Size(min = 3, max = 50) String getLastname();
+       String getLastname();
     }
 
     private interface Password {
@@ -53,12 +47,12 @@ public enum AppUserDto {
         Boolean isEmailVerified();
     }
 
-    private interface PhoneNumberVerified {
+    private interface IsPhoneNumberVerified {
         Boolean isTelephoneVerified();
     }
 
     private interface Roles {
-        List<RolesDto> getRoles();
+        List<AppRoleForUserDto> getRoles();
     }
 
     public enum Request {
@@ -132,18 +126,25 @@ public enum AppUserDto {
         @NoArgsConstructor
         @AllArgsConstructor
         public static class GetAllUserWithFilters{
+
             @Setter@Getter
             private Integer page;
+
             @Setter@Getter
             private Integer itemInPage;
+
             @Setter@Getter
             private String sortField;
+
             @Setter@Getter
             private Boolean directSort;
+
             @Setter@Getter
             private String searchField;
+
             @Setter@Getter
             private String searchValue;
+
             @Setter@Getter
             private Set<UserStatusEnum> status;
 
@@ -152,25 +153,27 @@ public enum AppUserDto {
 
     public enum Response {
         ;
+        @ToString
         @NoArgsConstructor
-        public static class userTable implements Id, Firstname, Surname, Lastname, Email, Telephone, Status {
-            @Setter
+        @AllArgsConstructor
+        public static class UserTable {
+            @Setter@Getter
             private Long id;
-            @Setter
+            @Setter@Getter
             private String firstname;
-            @Setter
+            @Setter@Getter
             private String surname;
-            @Setter
+            @Setter@Getter
             private String lastname;
-            @Setter
+            @Setter@Getter
             private String email;
-            @Setter
+            @Setter@Getter
             private String phoneNumber;
-            @Setter
+            @Setter@Getter
             private UserStatusEnum status;
 
 
-            public userTable(AppUser usr) {
+            public UserTable(AppUser usr) {
                 this.id = usr.getId();
                 this.firstname = usr.getFirstname();
                 this.surname = usr.getSurname();
@@ -180,56 +183,43 @@ public enum AppUserDto {
                 this.status = usr.getStatus();
             }
 
-            public userTable(Long id, String firstname, String surname, String lastname,
-                             String email, String phoneNumber, UserStatusEnum status) {
-                this.id = id;
-                this.firstname = firstname;
-                this.surname = surname;
-                this.lastname = lastname;
-                this.email = email;
-                this.phoneNumber = phoneNumber;
-                this.status = status;
-            }
-
-            @Override
-            public Long getId() {
-                return this.id;
-            }
-
-            @Override
-            public String getFirstname() {
-                return this.firstname;
-            }
-
-            @Override
-            public String getSurname() {
-                return this.surname;
-            }
-
-            @Override
-            public String getLastname() {
-                return this.lastname;
-            }
-
-            @Override
-            public String getEmail() {
-                return this.email;
-            }
-
-            @Override
-            public String getPhoneNumber() {
-                return this.phoneNumber;
-            }
-
-            @Override
-            public UserStatusEnum getStatus() {
-                return this.status;
-
-            }
-
         }
 
+        @NoArgsConstructor
+        public static class UserProfile {
+            @Setter@Getter
+            private Long id;
+            @Setter@Getter
+            private String firstname;
+            @Setter@Getter
+            private String surname;
+            @Setter@Getter
+            private String lastname;
+            @Setter@Getter
+            private String email;
+            @Setter@Getter
+            private String phoneNumber;
+            @Setter@Getter
+            private UserStatusEnum status;
+            @Setter@Getter
+            private Boolean isEmailVerified;
+            @Setter@Getter
+            private Boolean isPhoneNumberVerified;
+            @Setter@Getter
+            private List<AppRoleForUserDto> roles;
+
+            public UserProfile(AppUser usr){
+                this.id = usr.getId();
+                this.firstname = usr.getFirstname();
+                this.surname = usr.getSurname();
+                this.lastname = usr.getLastname();
+                this.email = usr.getEmail();
+                this.phoneNumber = usr.getPhoneNumber();
+                this.status = usr.getStatus();
+                this.isEmailVerified = usr.getIsEmailVerified();
+                this.isPhoneNumberVerified = usr.getPhoneVerified();
+                this.roles = usr.getRoles().stream().map(AppRoleForUserDto::new).collect(Collectors.toList());
+            }
+        }
     }
-
-
 }

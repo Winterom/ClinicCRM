@@ -1,40 +1,24 @@
 package auth_service.dto;
 
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.List;
 
+
 public class PaginationEntity<T> {
-    private Integer totalPages;
+    @Getter@Setter
+    private Integer totalPage;
+    @Getter@Setter
     private Integer currentPage;
+    @Getter@Setter
     private List<T> content;
 
-    public PaginationEntity(Integer totalPages, Integer currentPage, List<T> content) {
-        this.totalPages = totalPages;
+    public PaginationEntity(Integer totalPage, Integer currentPage, List<T> content) {
+        this.totalPage = totalPage;
         this.currentPage = currentPage;
         this.content = content;
     }
 
-    public Integer getTotalPages() {
-        return totalPages;
-    }
-
-    public void setTotalPages(Integer totalPages) {
-        this.totalPages = totalPages;
-    }
-
-    public Integer getCurrentPage() {
-        return currentPage;
-    }
-
-    public void setCurrentPage(Integer currentPage) {
-        this.currentPage = currentPage;
-    }
-
-    public List<?> getContent() {
-        return content;
-    }
-
-    public void setContent(List<T> content) {
-        this.content = content;
-    }
 }

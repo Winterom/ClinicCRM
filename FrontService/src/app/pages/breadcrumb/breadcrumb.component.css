@@ -52,6 +52,7 @@
 
 .is-active {
   background: #edf1f5;
+  pointer-events: none;
 }
 
 /* Some styles to make the page look a little nicer */

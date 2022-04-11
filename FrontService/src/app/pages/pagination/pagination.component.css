@@ -2,13 +2,33 @@ ul.pagination {
   display: inline-block;
   margin-top: 2vh;
   float: right;
+  box-sizing: border-box;
 }
 
 ul.pagination li {display: inline;}
 
-ul.pagination li a {
+ul.pagination li a{
   color: black;
   float: left;
   padding: 8px 16px;
   text-decoration: none;
+  cursor: pointer;
+  border-radius: 2px;
+  margin-left: 0.5vw;
+  border: 1px solid white;
+}
+.page_number_active:hover {
+  border: 1px solid royalblue;
+  background: #ADD8E6;
+}
+
+
+.arrow_disable{
+  background:#ededed;
+  cursor: not-allowed !important;
+}
+
+.page_number_disable{
+  cursor: not-allowed !important;
+  border: 1px solid royalblue!important;
 }

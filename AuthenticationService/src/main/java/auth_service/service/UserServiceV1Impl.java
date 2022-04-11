@@ -1,18 +1,15 @@
 package auth_service.service;
 
-import auth_service.dto.AppUserDto;
-import auth_service.dto.JwtDto;
 import auth_service.dto.PaginationEntity;
-import auth_service.entities.AppAuthoritiesEnum;
+import auth_service.dto.user_dto.AppUserDto;
 import auth_service.entities.AppUser;
 import auth_service.entities.UserStatusEnum;
-import auth_service.exception.BadPasswordOrUsernameException;
+import auth_service.exception.AppUserNotFoundException;
 import auth_service.exception.EmailExistsException;
 import auth_service.exception.PhoneNumberExistsException;
 import auth_service.exception.PhoneNumberValidationException;
 import auth_service.repositoryes.UserRepository;
 import auth_service.repositoryes.specification.AppUserSpecification;
-import auth_service.utils.JwtTokenUtils;
 import auth_service.validators.FieldNameChecker;
 import auth_service.validators.PhoneNumberValidator;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,21 +17,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
-import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -42,10 +29,9 @@ import java.util.stream.Collectors;
 
 
 @Service("SimpleUserService")
-public class UserServiceV1Impl implements UserService {
+public class UserServiceV1Impl  implements UserService{
     private final UserRepository userRepository;
-    private final JwtTokenUtils jwtTokenUtils;
-    private final AuthenticationManager authenticationManager;
+
     private final BCryptPasswordEncoder passwordEncoder;
     private final EntityManager entityManager;
 
@@ -58,32 +44,23 @@ public class UserServiceV1Impl implements UserService {
 
 
     public UserServiceV1Impl( UserRepository userRepository,
-                             JwtTokenUtils jwtTokenUtils, AuthenticationManager authenticationManager,
                              BCryptPasswordEncoder passwordEncoder, EntityManager entityManager) {
         this.userRepository = userRepository;
-        this.jwtTokenUtils = jwtTokenUtils;
-        this.authenticationManager = authenticationManager;
+
         this.passwordEncoder = passwordEncoder;
         this.entityManager = entityManager;
     }
+
+
     @Override
-    public JwtDto.Response generateAccessToken(JwtDto.Request authRequest) {
-        try {
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getEmail(), authRequest.getPassword()));
-        } catch (BadCredentialsException e) {
-            throw new BadPasswordOrUsernameException();
-        }
-        UserDetails userDetails = loadUserByUsername(authRequest.getEmail());
-        JwtDto.Response responseEntity = new JwtDto.Response();
-        responseEntity.setAccessToken(jwtTokenUtils.generateAccessToken(userDetails));
-        return responseEntity;
+    public AppUserDto.Response.UserProfile getUserById(Long id) {
+        AppUser user = userRepository.getAppUserById(id).orElseThrow(AppUserNotFoundException::new);
+        return new AppUserDto.Response.UserProfile(user);
     }
 
     @Override
-    public void registerUser(AppUserDto.Request.CreateOrUpdate userDto, HttpServletRequest request) {
-        if (isNonHasAuthority(AppAuthoritiesEnum.ADMIN_USER_WRITE, request)){
-            throw new AccessDeniedException("Доступ запрещен!");
-        }
+    public void registerUser(AppUserDto.Request.CreateOrUpdate userDto) {
+
         if (userRepository.getAppUsersByEmail(userDto.getEmail()).isPresent()){
             throw new EmailExistsException(userDto.getEmail());
         }
@@ -104,42 +81,28 @@ public class UserServiceV1Impl implements UserService {
         userRepository.save(usr);
     }
     @Override
-    public void updateAppUser(AppUserDto.Request.CreateOrUpdate userDto, HttpServletRequest request) {
-        if (isNonHasAuthority(AppAuthoritiesEnum.ADMIN_USER_WRITE, request)){
-            throw new AccessDeniedException("Доступ запрещен!");
-        }
+    public void updateAppUser(AppUserDto.Request.CreateOrUpdate userDto) {
+
     }
 
-    /*В качестве идентификатора используем почту*/
-    @Override
-    @Transactional
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        AppUser appUser= userRepository.getAppUserByEmailAndStatusEquals(email, UserStatusEnum.ACTIVE).orElseThrow(BadPasswordOrUsernameException::new);
-        return new User(appUser.getEmail(),appUser.getPassword(),appUser.getAuthorities());
-    }
+
 
     @Override
-    public Boolean checkEmail(String email, HttpServletRequest request){
-        if (isNonHasAuthority(AppAuthoritiesEnum.ADMIN_USER_READ, request)){
-            throw new AccessDeniedException("Доступ запрещен!");
-        }
+    public Boolean checkEmail(String email){
         return userRepository.getAppUsersByEmail(email).isEmpty();
     }
 
     @Override
-    public Boolean checkPhoneNumber(String phoneNumber,HttpServletRequest request){
-        if (isNonHasAuthority(AppAuthoritiesEnum.ADMIN_USER_READ, request)){
-            throw new AccessDeniedException("Доступ запрещен!");
-        }
+    public Boolean checkPhoneNumber(String phoneNumber){
         return userRepository.getAppUserByPhoneNumber(phoneNumber).isEmpty();
     }
 
     @Override
-    public PaginationEntity<AppUserDto.Response.userTable> getAllUser(Integer page, Integer itemInPage, String sortField, boolean directSort,
-                                                                      String searchField, String searchValue, Set<UserStatusEnum> status,
-                                                                      HttpServletRequest request) {
-        if (isNonHasAuthority(AppAuthoritiesEnum.ADMIN_USER_WRITE, request)){
-            throw new AccessDeniedException("Доступ запрещен!");
+    public PaginationEntity<AppUserDto.Response.UserTable> getAllUser(Integer page, Integer itemInPage, String sortField, boolean directSort,
+                                                                      String searchField, String searchValue, Set<UserStatusEnum> status
+                                                                      ) {
+        if(page==null){
+            page=1;
         }
         /*ASC по возрастанию Desc убывание*/
         Sort.Direction direction =Sort.Direction.ASC;
@@ -157,6 +120,7 @@ public class UserServiceV1Impl implements UserService {
 
         /*Добавляем спецификацию исходя из параметров запроса*/
         Specification<AppUser> spec;
+        /*Если строка запроа пуста то спецификацию не добавляем*/
         if (searchValue!=null){
             spec= Specification.where(AppUserSpecification.valueLike(searchField,searchValue));
         }else{
@@ -164,18 +128,8 @@ public class UserServiceV1Impl implements UserService {
         }
         Specification<AppUser> specStatus = Specification.where(AppUserSpecification.statusValue(status));
         Page<AppUser> pageable = userRepository.findAll(spec.and(specStatus), PageRequest.of(page - 1, itemInPage,sort));
-        List<AppUserDto.Response.userTable> result = pageable.getContent().stream().map(AppUserDto.Response.userTable::new).collect(Collectors.toList());
+        List<AppUserDto.Response.UserTable> result = pageable.getContent().stream().map(AppUserDto.Response.UserTable::new).collect(Collectors.toList());
         return new PaginationEntity<>(pageable.getTotalPages(), page, result);
-    }
-
-
-    private boolean isNonHasAuthority(AppAuthoritiesEnum authorities, HttpServletRequest request){
-        String roles = request.getHeader("roles");
-        if(roles == null){
-           return true;
-        }
-        List<String> rolesList = Arrays.stream(roles.replaceAll("\\[", "").replaceAll("\\]", "").replaceAll("\\s", "").split(",")).toList();
-        return !rolesList.contains(authorities.name());
     }
 
 

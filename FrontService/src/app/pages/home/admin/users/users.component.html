@@ -3,7 +3,7 @@
 
   <div class="filters">
     <details>
-      <summary>
+      <summary id="filters">
         Фильтры
       </summary>
       <form id="search_form" [formGroup]="form" (ngSubmit)="onSubmit()">
@@ -50,8 +50,8 @@
             </div>
           </div>
         </div>
-        <button (click)="onReset()">Очистить</button>
-        <button type="submit">Применить</button>
+        <button (click)="onReset()" class="button_form">Очистить</button>
+        <button type="submit" class="button_form">Применить</button>
       </form>
     </details>
   </div>
@@ -60,9 +60,9 @@
       <thead>
       <tr>
         <th class="td_id">ID</th>
-        <th class="td_fio">Фамилия</th>
-        <th class="td_fio">Имя</th>
-        <th class="td_fio">Отчество</th>
+        <th class="td_field">Фамилия</th>
+        <th class="td_field">Имя</th>
+        <th class="td_field">Отчество</th>
         <th class="td_email">Email</th>
         <th class="td_phone">Телефон</th>
         <th class="td_status">Статус</th>
@@ -75,9 +75,9 @@
         <tbody>
         <tr *ngFor="let item of usersArray" (click)="getUserById(item.id)">
           <td class="td_id">{{item.id}}</td>
-          <td class="td_fio">{{item.surname}}</td>
-          <td class="td_fio">{{item.firstname}}</td>
-          <td class="td_fio">{{item.lastname}}</td>
+          <td class="td_field">{{item.surname}}</td>
+          <td class="td_field">{{item.firstname}}</td>
+          <td class="td_field">{{item.lastname}}</td>
           <td class="td_email">{{item.email}}</td>
           <td class="td_phone">{{item.phoneNumber}}</td>
           <td class="td_status" *ngIf="item.status==='ACTIVE'">Активно</td>
@@ -88,6 +88,11 @@
       </table>
     </div>
   </div>
-  <app-pagination [page]="page"></app-pagination>
+  <div class="footer">
+    <div class="button_create_user">
+      <button class="button_form" (click)="createUser()">Создать пользователя</button>
+    </div>
+    <app-pagination [totalPage]="totalPage" [currentPage]="currentPage"></app-pagination>
+  </div>
 </div>
 

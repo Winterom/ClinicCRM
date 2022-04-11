@@ -8,6 +8,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="FrontService" />
+        <module name="EmployerService" />
         <module name="AuthenticationService" />
         <module name="GatewayService" />
         <module name="ScheduleService" />
@@ -15,13 +16,16 @@
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="FrontService" target="17" />
+      <module name="PersonService" target="17" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="AuthenticationService" options="-parameters" />
+      <module name="EmployerService" options="-parameters" />
       <module name="FrontService" options="-parameters" />
       <module name="GatewayService" options="-parameters" />
+      <module name="PersonService" options="-parameters" />
       <module name="ScheduleService" options="-parameters" />
     </option>
   </component>
