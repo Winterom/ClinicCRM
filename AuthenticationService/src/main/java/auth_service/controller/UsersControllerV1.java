@@ -1,45 +1,51 @@
 package auth_service.controller;
 
-import auth_service.dto.AppUserDto;
 import auth_service.dto.PaginationEntity;
-import auth_service.entities.AppUser;
+import auth_service.dto.user_dto.AppUserDto;
+import auth_service.entities.AppAuthoritiesEnum;
 import auth_service.service.UserService;
-import io.swagger.v3.oas.annotations.Parameter;
+import auth_service.utils.RequestHeaderRoleChecker;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/users")
 @Tag(name = "контроллер AppUser", description = "Контроллер предоставляющий информацию по Пользователям AppUser")
 public class UsersControllerV1 {
     private final UserService userService;
 
-    public UsersControllerV1(@Qualifier("UserServiceDecoration") UserService userService) {
+    public UsersControllerV1(UserService userService) {
         this.userService = userService;
     }
     /*@PreAuthorize("hasAuthority(T(auth_service.entities.AppAuthoritiesEnum).ADMIN_USER_WRITE)")*/
+
     @PostMapping("/registration")
-    public AppUser registerAppUser(@RequestBody AppUserDto.Request.Create userDto,HttpServletRequest request){
-        return userService.registerUser(userDto,request);
+    public void registerAppUser(@RequestBody AppUserDto.Request.CreateOrUpdate userDto, HttpServletRequest request){
+        RequestHeaderRoleChecker.hasAuthority(AppAuthoritiesEnum.ADMIN_USER_WRITE,request);
+        userService.registerUser(userDto);
     }
 
+    @PostMapping("/update")
+    public void updateAppUser(@RequestBody AppUserDto.Request.CreateOrUpdate userDto, HttpServletRequest request){
+        RequestHeaderRoleChecker.hasAuthority(AppAuthoritiesEnum.ADMIN_USER_WRITE,request);
+    }
 
-    /*@PreAuthorize("hasAnyAuthority(T(auth_service.entities.AppAuthoritiesEnum).ADMIN_USER_WRITE.name()" +
-            ",T(auth_service.entities.AppAuthoritiesEnum).ADMIN_USER_READ.name())")*/
-    @GetMapping("/get_all")
-    public PaginationEntity<AppUserDto.Response.userTable> getAllUserInfo(
-            @Parameter(description = "Номер текущей страницы") @RequestParam(name = "page", defaultValue = "1") Integer page,
-            @Parameter(description = "Количество на странице")@RequestParam(name = "size", defaultValue = "10") Integer itemInPage,
-            @Parameter(description = "Поле по которому происходит сортировка")@RequestParam(name = "sort_field", required = false) String sortField,
-            @Parameter(description = "Сортировка по возрастанию true, иначе false")@RequestParam(name = "directSort", defaultValue = "false") boolean directSort,
-            @Parameter(description = "Поле по которому происходит поиск")@RequestParam(name = "search_field", required = false) String searchField,
-            @Parameter(description = "Искомое значение")@RequestParam(name = "search_value", required = false) String searchValue,
-        HttpServletRequest request){
-        return userService.getAllUser(page,itemInPage,sortField, directSort,searchField,searchValue,request);
+    @PostMapping("/get_all")
+    public PaginationEntity<AppUserDto.Response.UserTable> getAllUserInfo(@Validated @RequestBody AppUserDto.Request.GetAllUserWithFilters reqParam,
+                                                                          HttpServletRequest request){
+        RequestHeaderRoleChecker.hasAuthority(AppAuthoritiesEnum.ADMIN_USER_READ,request);
+        return userService.getAllUser(reqParam.getPage(),reqParam.getItemInPage(),
+                reqParam.getSortField(), reqParam.getDirectSort(), reqParam.getSearchField(),
+                reqParam.getSearchValue(),reqParam.getStatus());
+    }
+
+    @GetMapping("/get_by_id/{id}")
+    public AppUserDto.Response.UserProfile getUserProfileById(@PathVariable Long id, HttpServletRequest request){
+        RequestHeaderRoleChecker.hasAuthority(AppAuthoritiesEnum.ADMIN_USER_READ,request);
+        return userService.getUserById(id);
     }
 }

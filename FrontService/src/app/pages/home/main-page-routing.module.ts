@@ -1,5 +1,5 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import {NgModule} from '@angular/core';
+import {RouterModule, Routes} from '@angular/router';
 import {MainComponent} from "./main.component";
 import {MainPageGuard} from "../../guard/main-page-guard.service";
 import {DesktopComponent} from "./desktop/desktop.component";

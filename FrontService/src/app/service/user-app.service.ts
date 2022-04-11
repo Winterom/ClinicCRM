@@ -6,83 +6,57 @@ const TOKEN_KEY = 'auth-token';
   providedIn: 'root'
 })
 export class UserAppService {
-  private isLogin: boolean = false;
-  private _expireDate: Date | undefined;
-  private _email: string='';
-  private _roles = new Set;
 
   constructor() {
-    if (!this.getToken()) {
-      return;
     }
-    this.parseJwt(this.getToken())
-    if(this.isNonExpire()) {
-      this.isLogin = true;
-    }else {
-      this.isLogin = false;
-    }
-  }
 
-  signOut(): void {
-    this._roles.clear();
-    this.isLogin =false;
-    this._email='';
-    this._expireDate = undefined;
+
+  public signOut(): void {
     window.localStorage.clear();
   }
 
   public saveToken(token: string): void {
     window.localStorage.removeItem(TOKEN_KEY);
     window.localStorage.setItem(TOKEN_KEY, token);
-    this.parseJwt(token);
+    UserAppService.parseJwt(token);
   }
 
-  public getToken(): string {
-    return <string>window.localStorage.getItem(TOKEN_KEY);
+  public getToken(): string | null {
+    let token:string = <string>window.localStorage.getItem(TOKEN_KEY);
+    if(token){
+      if (UserAppService.parseJwt(token)){
+        return token;
+      }
+    }
+    return null;
   }
 
-  parseJwt(token: string) {
+  private static parseJwt (token: string): any {
     let base64Url = token.split('.')[1];
     let base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
     let jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
       return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
     }).join(''));
-    console.log(JSON.parse(jsonPayload));
     let tok = JSON.parse(jsonPayload);
-    this._expireDate = new Date(tok.exp * 1000);
-    this._email = tok.sub;
-    this._roles = new Set(tok.roles);
-  }
-
-  isNonExpire():boolean{
-    if (this.expireDate){
-      if (this.expireDate.getDate()<Date.now()){
-        return true;
-      }
-      return false;
+    let currentTime: number = new Date().getTime() / 1000;
+    if (currentTime>tok.exp){
+      window.localStorage.removeItem(TOKEN_KEY);
+      return null;
     }
-    return false;
-  }
-  isLog(): boolean {
-    return this.isLogin;
+    return tok;
   }
 
-  setLog(log: boolean) {
-    this.isLogin = log;
+  public getRole():Set<string>| null{
+    let token = UserAppService.parseJwt(<string>window.localStorage.getItem(TOKEN_KEY));
+    if (token){
+      let set = new Set<string> (token.roles);
+      console.log(set)
+      return set;
+    }
+    return null;
   }
 
 
-  get expireDate(): Date | undefined {
-    return this._expireDate;
-  }
-
-  get email(): string {
-    return this._email;
-  }
-
-  get roles(): Set<any> {
-    return this._roles;
-  }
 }
 
 

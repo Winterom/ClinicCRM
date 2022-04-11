@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
-import {HttpClient, HttpParams} from "@angular/common/http";
+import {Injectable} from '@angular/core';
+import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {ApiService} from "./api.service";
 
@@ -11,28 +11,26 @@ export class DataService {
 
   constructor(private http: HttpClient, private api: ApiService) { }
 
-  public getAllUsersPaging(page:number,size:number,sort_field:string|null,directSort:boolean,
-                           search_field:string|null,search_value:string|null):Observable<any> {
-    console.log(page)
-    console.log(size)
-    console.log(sort_field)
-    console.log(directSort)
-    console.log(search_field)
-    console.log(search_value)
-    let params = new HttpParams();
-    params = params.set("page",page.toString())
-    params = params.set("size",size.toString());
-    if(sort_field){
-      params = params.set("sort_field",sort_field.toString());
+  public getAllUsersPaging(page:number|null,size:number,sort_field:string|null,directSort:boolean,
+                           search_field:string|null,search_value:string|null, status:Set<string>):Observable<any> {
+
+    const getAllUserWithFilters = {
+      page: page,
+      itemInPage:size,
+      sortField:sort_field,
+      directSort:directSort,
+      searchField:search_field,
+      searchValue:search_value,
+      status:Array.from(status.keys())
     }
-    params = params.set("directSort",directSort);
-    if (search_field){
-      params = params.set("search_field",search_field.toString());
-    }
-    if (search_value){
-      params = params.set("search_value",search_value.toString());
-    }
-    console.log(params);
-    return this.http.get<any>(this.api.getAllUser, {'params': params })
+    return this.http.post<any>(this.api.getAllUser,getAllUserWithFilters)
   };
+
+  public getProfileById(id: string | null){
+    return this.http.get(this.api.getProfileById+id);
+  }
+
+  public getRoleByUserId(id: string | null){
+    return this.http.get(this.api.getRolesByUser+id);
+  }
 }

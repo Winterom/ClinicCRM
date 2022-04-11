@@ -1,19 +1,81 @@
 
-<h2>{{titlePage}}</h2>
-<form [formGroup]="form" (ngSubmit)="onSubmit()">
-  <em>ID пользователя: {{id}}</em>
-  <p><em>Фамилия:</em>
-    <input type="text">
-  <em>Имя:</em>
-    <input type="text">
-  <em>Отчество:</em>
-    <input type="text">
-  </p>
-  <p><em>Email:</em>
-    <input type="text">
-  </p>
-  <p><em>Телефон:</em>
-    <input type="text">
-  </p>
 
+<h2>{{titlePage}}</h2>
+<h3>Ф.И.О.: {{fullName}}</h3>
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="user_container">
+  <em *ngIf="!isNewUser" class="em_id">ID пользователя: {{id}}</em>
+  <details class="fio_details">
+    <summary class="fio_summary">
+      Полное имя
+    </summary>
+    <div class="fio_container">
+      <div class="fio_label">
+        <div>Фамилия:</div>
+        <div>Имя:</div>
+        <div>Отчество:</div>
+      </div>
+      <div class="fio_input">
+        <div><input formControlName="controlInputSurname"  type="text" (input)="fioInputChange()"></div>
+        <div><input formControlName="controlInputName" type="text" (input)="fioInputChange()"></div>
+        <div><input formControlName="controlInputLastName" type="text" (input)="fioInputChange()"></div>
+      </div>
+    </div>
+  </details>
+  <details>
+    <summary class="fio_summary">
+      Учетная запись
+    </summary>
+    <div class="fio_container">
+    <div class="fio_label">
+      <div>Email:</div>
+      <div>Телефон:</div>
+    </div>
+    <div class="fio_input">
+      <div><input formControlName="controlInputEmail"type="text"></div>
+      <div><input formControlName="controlInputPhone"type="text"></div>
+    </div>
+    </div>
+  </details>
+  <details>
+    <summary class="fio_summary">
+      Роли
+    </summary>
+    <div class="table-scroll">
+      <table id="header_table">
+        <thead>
+        <tr>
+          <th class="td_id">ID</th>
+          <th class="td_field">Наименование роли</th>
+          <th class="td_field">Описание</th>
+          <th class="td_field">Признак</th>
+        </tr>
+        </thead>
+      </table>
+      <div class="table-scroll-body">
+        <table id="body-table">
+          <tbody>
+          <tr *ngFor="let item of roleArray" >
+            <td class="td_id">{{item.id}}</td>
+            <td class="td_field">{{item.roleName}}</td>
+            <td class="td_field">{{item.description}}</td>
+            <td class="td_field input_field">
+              <input class="custom-checkbox"
+                     type="checkbox" [checked]="item.userHasRole==true">
+            </td>
+          </tr>
+          </tbody>
+        </table>
+
+    </div>
+    </div>
+
+  </details>
 </form>
+<div class="footer_form">
+<div class="button_create_user">
+  <button class="button_form" (click)="onSubmit()" [disabled]="!form.dirty">Сохранить</button>
+</div>
+<div class="button_create_user">
+  <button class="button_form" (click)="onReset()" [disabled]="!form.dirty">Отменинить изменения</button>
+</div>
+</div>

@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree} from '@angular/router';
-import { Observable } from 'rxjs';
+import {Observable} from 'rxjs';
 import {UserAppService} from "../service/user-app.service";
 
 @Injectable({
@@ -12,7 +12,7 @@ export class MainPageGuard implements CanActivate {
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-    if (!this.user.isLog()){
+    if (!this.user.getToken()){
       return this.router.navigate(['login'],{queryParams:{'redirectURL':state.url}});
     }
     return true;

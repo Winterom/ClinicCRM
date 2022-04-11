@@ -45,6 +45,7 @@ public class JwtAuthFilter extends AbstractGatewayFilterFactory<JwtAuthFilter.Co
     }
 
     private String getAuthHeader(ServerHttpRequest request) {
+        System.out.println("filter vse ok header");
         return request.getHeaders().getOrEmpty("Authorization").get(0).substring(7);
     }
 
@@ -60,6 +61,7 @@ public class JwtAuthFilter extends AbstractGatewayFilterFactory<JwtAuthFilter.Co
 
     private void populateRequestWithHeaders(ServerWebExchange exchange, String token) {
         Claims claims = jwtUtil.getAllClaimsFromToken(token);
+        System.out.println("filter vse ok");
         exchange.getRequest().mutate()
                 .header("email", claims.getSubject())
                 .header("roles", String.valueOf(claims.get("roles")))

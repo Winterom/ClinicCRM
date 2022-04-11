@@ -1,1 +1,7 @@
-<p>pagination works!</p>
+<ul class="pagination">
+  <li><a (click)="firstPage()" [ngClass]="{'page_number_active':!firstPageDisable,'arrow_disable':firstPageDisable}"><<</a></li>
+  <li *ngFor="let item of buttons">
+    <a (click)="changePage(item)" [ngClass]="item===currentPage? 'page_number_disable':'page_number_active'" >{{item}}</a>
+  </li>
+  <li><a (click)="lastPage()" [ngClass]="{'page_number_active':!lastPageDisable,'arrow_disable':lastPageDisable}">>></a></li>
+</ul>

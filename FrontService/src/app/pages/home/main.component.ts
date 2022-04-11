@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {UserAppService} from "../../service/user-app.service";
 import {Role} from "../../service/role";
 
@@ -15,7 +15,11 @@ export class MainComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.showAdmin=(this.user.roles.has(Role.ADMIN_USER_WRITE)||this.user.roles.has(Role.ADMIN_USER_READ));
+    let role = this.user.getRole();
+    if (role){
+      this.showAdmin=(role.has(Role.ADMIN_USER_WRITE)||role.has(Role.ADMIN_USER_READ));
+    }
+
   }
 
   collapseLeftMenu():void{

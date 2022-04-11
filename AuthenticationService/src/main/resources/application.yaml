@@ -9,7 +9,7 @@ jwt:
     length: 50
     max_age: 32400
   lifetime:
-    access: 900
+    access: 8000000
     refresh: 2592000
 
 #Срок годности пароля в МЕСЯЦАХ

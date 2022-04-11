@@ -1,58 +1,98 @@
 <h2>Список пользователей</h2>
 <div class="container">
+
   <div class="filters">
-    <label for="search_form">Фильтры</label>
-    <form id="search_form" [formGroup]="form" (ngSubmit)="onSubmit()">
-      <div class="form_item">
-        <em>Количество на странице:</em>
-        <select class="select" formControlName="sizeValueControl" >
-          <option *ngFor="let value of sizeValue" [ngValue]="value">{{value.value}}</option>
-        </select>
-      </div>
-      <div class="form_item">
-        <em>Сортировать по полю:</em>
-        <select class="select" formControlName="fieldSortControl">
-          <option *ngFor="let field of fieldValue" [ngValue]="field">{{field.value}}</option>
-        </select>
-        <em>По возрастанию: </em>
-        <input formControlName="checkBoxSortedControl" class="custom-checkbox" type="checkbox" id="checkbox" checked>
-      </div>
-      <div class="form_item">
-        <em>Поиск по полю</em>
-        <select class="select" formControlName="fieldSearchControl">
-          <option *ngFor="let field2 of fieldValue" [ngValue]="field2">{{field2.value}}</option>
-        </select>
-        <input formControlName="valueSearchControl" type="text" class="text-field__input"
-               placeholder="Введите значение для поиска">
-        <span>Минимум три символа</span>
-      </div>
-      <button (click)="onReset()">Очистить</button>
-      <button type="submit">Применить</button>
-    </form>
+    <details>
+      <summary id="filters">
+        Фильтры
+      </summary>
+      <form id="search_form" [formGroup]="form" (ngSubmit)="onSubmit()">
+        <div class="group_in_form">
+          <div class="left_side">
+            <div class="form_item">
+              <em>Количество на странице:</em>
+              <select class="select" formControlName="sizeValueControl">
+                <option *ngFor="let value of sizeValue" [ngValue]="value">{{value.value}}</option>
+              </select>
+            </div>
+            <div class="form_item">
+              <em>Сортировать по полю:</em>
+              <select class="select" formControlName="fieldSortControl">
+                <option *ngFor="let field of fieldValue" [ngValue]="field">{{field.value}}</option>
+              </select>
+              <em>По возрастанию: </em>
+              <input formControlName="checkBoxSortedControl" class="custom-checkbox" type="checkbox" checked>
+            </div>
+            <div class="form_item">
+              <em>Поиск по полю</em>
+              <select class="select" formControlName="fieldSearchControl">
+                <option *ngFor="let field2 of fieldValue" [ngValue]="field2">{{field2.value}}</option>
+              </select>
+              <input formControlName="valueSearchControl" type="text" class="text-field__input"
+                     placeholder="Введите значение для поиска">
+              <span>Минимум три символа</span>
+            </div>
+          </div>
+          <div class="status_select_box">
+            <span>Фильтр по статусу учетной записи</span>
+            <div class="status_select">
+
+              <div class="status_select_label">
+                <em>Статус "Активно": </em>
+                <em>Статус "Удалено" </em>
+                <em>Статус "Заблокировано" </em>
+              </div>
+              <div class="status_select_checkbox">
+                <input formControlName="checkBoxActiveControl" class="custom-checkbox" type="checkbox" checked>
+                <input formControlName="checkBoxDeletedControl" class="custom-checkbox" type="checkbox" checked>
+                <input formControlName="checkBoxBannedControl" class="custom-checkbox" type="checkbox" checked>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button (click)="onReset()" class="button_form">Очистить</button>
+        <button type="submit" class="button_form">Применить</button>
+      </form>
+    </details>
   </div>
-  <table>
-    <thead>
-    <tr>
-      <th>ID</th>
-      <th>Фамилия</th>
-      <th>Имя</th>
-      <th>Отчество</th>
-      <th>Email</th>
-      <th>Телефон</th>
-      <th>Блокировка</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr *ngFor="let item of usersArray" (click)="getUserById(item.id)">
-      <td class="td_id">{{item.id}}</td>
-      <td class="td_fio">{{item.surname}}</td>
-      <td class="td_fio">{{item.firstname}}</td>
-      <td class="td_fio">{{item.lastname}}</td>
-      <td class="td_email">{{item.email}}</td>
-      <td class="td_phone">{{item.phoneNumber}}</td>
-      <td class="td_lock">{{item.isLocked}}</td>
-    </tr>
-    </tbody>
-  </table>
+  <div class="table-scroll">
+    <table id="header_table">
+      <thead>
+      <tr>
+        <th class="td_id">ID</th>
+        <th class="td_field">Фамилия</th>
+        <th class="td_field">Имя</th>
+        <th class="td_field">Отчество</th>
+        <th class="td_email">Email</th>
+        <th class="td_phone">Телефон</th>
+        <th class="td_status">Статус</th>
+      </tr>
+      </thead>
+    </table>
+
+    <div class="table-scroll-body">
+      <table id="body-table">
+        <tbody>
+        <tr *ngFor="let item of usersArray" (click)="getUserById(item.id)">
+          <td class="td_id">{{item.id}}</td>
+          <td class="td_field">{{item.surname}}</td>
+          <td class="td_field">{{item.firstname}}</td>
+          <td class="td_field">{{item.lastname}}</td>
+          <td class="td_email">{{item.email}}</td>
+          <td class="td_phone">{{item.phoneNumber}}</td>
+          <td class="td_status" *ngIf="item.status==='ACTIVE'">Активно</td>
+          <td class="td_status deleted" *ngIf="item.status==='DELETED'">Удалено</td>
+          <td class="td_status" *ngIf="item.status==='BANNED'">Заблокировано</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="footer">
+    <div class="button_create_user">
+      <button class="button_form" (click)="createUser()">Создать пользователя</button>
+    </div>
+    <app-pagination [totalPage]="totalPage" [currentPage]="currentPage"></app-pagination>
+  </div>
 </div>
 

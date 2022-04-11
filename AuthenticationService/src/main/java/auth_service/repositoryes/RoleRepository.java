@@ -2,11 +2,12 @@ package auth_service.repositoryes;
 
 import auth_service.entities.AppRole;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
 
 
+
+@Repository
 public interface RoleRepository extends CrudRepository<AppRole,Long> {
-    Optional<AppRole> getAppRoleById(Long id);
-    Optional<AppRole> getAppRoleByRoleName(String name);
+
 }

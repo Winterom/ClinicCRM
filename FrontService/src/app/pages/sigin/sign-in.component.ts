@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {UserAppService} from "../../service/user-app.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {AuthService} from "../../service/auth.service";
@@ -11,7 +11,6 @@ import {AbstractControl, FormBuilder, FormGroup, Validators} from "@angular/form
 })
 export class SignInComponent implements OnInit {
   form: FormGroup;
-  isLoggedIn = false;
   isLoginFailed = false;
   errorMessage = '';
   statusCode:number|undefined;
@@ -45,9 +44,7 @@ export class SignInComponent implements OnInit {
       next: data => {
         console.log(data);
         this.user.saveToken(data.accessToken);
-        this.user.setLog(true);
         this.isLoginFailed = false;
-        this.isLoggedIn = true;
         if (this.redirectURL) {
           this.router.navigateByUrl(this.redirectURL,)
             .catch(() => this.router.navigate(['main']))

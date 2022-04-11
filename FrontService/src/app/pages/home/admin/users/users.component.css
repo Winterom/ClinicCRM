@@ -1,5 +1,11 @@
+:root{
+  --table-height:34vh;
+}
+
 h2{
   text-align: center;
+  margin: 0;
+  padding: 0;
 }
 
 .container{
@@ -8,9 +14,30 @@ h2{
   flex-direction: column;
 
 }
+details summary::-webkit-details-marker {
+  display: none
+}
+details > summary {
+  width: 5rem;
+  list-style: none;
+  font-size: 1rem;
+  font-weight: bold;
+  border-radius: 4px;
+  background: #ADD8E6 !important;
+  padding: 0.5rem 2rem;
+  margin-bottom: 1rem;
+  cursor: pointer;
+}
+
+details>summary:hover{
+  opacity: 70%;
+}
+
+details[open].table-scroll-body{
+  height: 54vh !important;
+}
+
 form{
-  position: sticky;
-  top: 0;
   background: #f7f7f7;
   border: 1px solid darkgray;
   border-radius: 0.5rem;
@@ -31,14 +58,17 @@ form em{
   margin-right: 1em;
   margin-left: 1em;
 }
-form button{
+.button_form{
   padding: 0.5em 1em;
-  margin-top: 1em;
   margin-right: 2em;
   font-size: inherit;
   cursor: pointer;
   border-radius:  0.25rem;
   border: 1px solid #bdbdbd;
+  background: #ADD8E6 !important;
+}
+.button_form:hover{
+  opacity: 70%;
 }
 span{
   margin-left: 4px;
@@ -46,7 +76,10 @@ span{
 .form_item{
   margin-bottom: 0.3em;
 }
-
+.group_in_form{
+  display: flex;
+  justify-content: space-between;
+}
 select {
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -107,19 +140,71 @@ input[type=checkbox]:checked:after {
   border-radius: 0.25rem;
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
-table{
-  border-collapse: collapse;
-  border: 1px solid grey;
-
+.status_select{
+  margin-top: 2vh;
+  margin-right: 3vw;
+  border: 1px solid black;
+  border-radius: 0.5rem;
+  padding-right: 1vw;
+  display: flex;
+  justify-content: space-between;
+  padding-top: 1vh;
 }
+.status_select_label{
+  display: flex;
+  flex-direction: column;
+}
+.status_select_label em{
+  margin-bottom: 1vh;
+}
+.status_select_checkbox{
+  display: flex;
+  flex-direction: column;
+}
+.status_select_checkbox input{
+  margin-bottom: 1vh;
+}
+
+.table-scroll table{
+  width: 100%;
+  table-layout: fixed;
+  border: none;
+}
+.table-scroll thead th{
+  border: none;
+  border-left: 1px solid #87CEFA;
+  border-right: 1px solid #87CEFA;
+}
+
+#header_table{
+  border-spacing: 0;
+}
+#header_table th{
+  height: 2.5rem;
+}
+.table-scroll-body{
+  border-collapse: collapse;
+  border-bottom: 1px solid grey;
+  height: 34vh;
+  overflow-x: auto;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+}
+::-webkit-scrollbar-thumb {
+  box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+}
+
 thead{
   font-weight: bold;
   background: #87CEFA;
   font-size: 1.1rem;
 }
-th{
-  height: 2rem;
-}
+
 table tbody tr:nth-child(3n+1){
   background: #f2fff5;
 }
@@ -137,19 +222,15 @@ tbody{
   cursor: pointer;
 }
 
-th{
-  border: 1px solid grey;
-}
 
 td{
-  border: 1px solid grey;
   height: 3rem;
 }
 .td_id{
   width: 5vh;
   text-align: center;
 }
-.td_fio{
+.td_field{
   width: 10rem;
   padding-left: 1vh;
 }
@@ -163,7 +244,26 @@ td{
   width: 10rem;
 }
 
-.td_lock{
+.td_status{
+  text-align: center;
   width: 10rem;
+}
+.deleted{
+  color: red;
+  font-weight: bold;
+}
+#body-table tr:hover{
+  opacity: 80%;
+  font-size: 1.1rem;
+}
+
+.footer{
+  margin-top: 1vh;
+  display: flex;
+  justify-content: space-between;
+}
+
+.button_create_user{
+
 }
 
