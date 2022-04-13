@@ -9,7 +9,9 @@
     </option>
     <option name="ignoredFiles">
       <set>
+        <option value="$PROJECT_DIR$/EmployerService/pom.xml" />
         <option value="$PROJECT_DIR$/PersonService/pom.xml" />
+        <option value="$PROJECT_DIR$/ScheduleService/pom.xml" />
       </set>
     </option>
   </component>
@@ -18,5 +20,10 @@
   </component>
   <component name="ProjectType">
     <option name="id" value="jpab" />
+  </component>
+  <component name="SwUserDefinedSpecifications">
+    <option name="specTypeByUrl">
+      <map />
+    </option>
   </component>
 </project>
