@@ -1,0 +1,8 @@
+server:
+  port: 8089
+  servlet:
+    context-path: /web-app-sender
+email-sender:
+  emailFrom: devsender2022@gmail.com
+  password: london8793
+  host: localhost:8089/sender/
