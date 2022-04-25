@@ -49,9 +49,7 @@ export class UserAppService {
   public getRole():Set<string>| null{
     let token = UserAppService.parseJwt(<string>window.localStorage.getItem(TOKEN_KEY));
     if (token){
-      let set = new Set<string> (token.roles);
-      console.log(set)
-      return set;
+      return new Set<string>(token.roles);
     }
     return null;
   }

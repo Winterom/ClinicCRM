@@ -6,6 +6,8 @@ import auth_service.entities.AppAuthoritiesEnum;
 import auth_service.service.UserService;
 import auth_service.utils.RequestHeaderRoleChecker;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,24 +16,19 @@ import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("/api/v1/users")
-@Tag(name = "контроллер AppUser", description = "Контроллер предоставляющий информацию по Пользователям AppUser")
+@Tag(name = "контроллер AppUser", description = "Контроллер предоставляющий информацию по Пользователям ")
 public class UsersControllerV1 {
     private final UserService userService;
 
     public UsersControllerV1(UserService userService) {
         this.userService = userService;
     }
-    /*@PreAuthorize("hasAuthority(T(auth_service.entities.AppAuthoritiesEnum).ADMIN_USER_WRITE)")*/
-
-    @PostMapping("/registration")
-    public void registerAppUser(@RequestBody AppUserDto.Request.CreateOrUpdate userDto, HttpServletRequest request){
-        RequestHeaderRoleChecker.hasAuthority(AppAuthoritiesEnum.ADMIN_USER_WRITE,request);
-        userService.registerUser(userDto);
-    }
 
     @PostMapping("/update")
-    public void updateAppUser(@RequestBody AppUserDto.Request.CreateOrUpdate userDto, HttpServletRequest request){
+    public ResponseEntity<?> updateAppUser(@RequestBody AppUserDto.Request.CreateOrUpdate userDto, HttpServletRequest request){
         RequestHeaderRoleChecker.hasAuthority(AppAuthoritiesEnum.ADMIN_USER_WRITE,request);
+        userService.updateAppUser(userDto);
+        return ResponseEntity.ok(HttpStatus.CREATED);
     }
 
     @PostMapping("/get_all")

@@ -1,4 +1,4 @@
-export enum Role{
+export enum Authorities{
   ADMIN_USER_READ='ADMIN_USER_READ',
   ADMIN_USER_WRITE='ADMIN_USER_WRITE',
   ADMIN_USER_DELETE ='ADMIN_USER_DELETE',

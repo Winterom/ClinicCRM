@@ -4,10 +4,14 @@ package auth_service.dto.user_dto;
 import auth_service.dto.role_dto.AppRoleForUserDto;
 import auth_service.entities.AppUser;
 import auth_service.entities.UserStatusEnum;
+import auth_service.exception.PhoneNumberValidationException;
+import auth_service.validators.PhoneNumberValidator;
 import lombok.*;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import javax.validation.constraints.NotBlank;
+
 import javax.validation.constraints.Size;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -16,63 +20,49 @@ public enum AppUserDto {
     ;
 
     private interface Firstname {
-        @Size(min = 3, max = 50) String getFirstname();
+         void setFirstname(@Size(min = 3, max = 50)String firstname);
     }
 
     private interface Surname {
-        @Size(max = 50) String getSurname();
+         void setSurname(@Size(max = 50)String surname);
     }
 
-    private interface Lastname {
-       String getLastname();
-    }
 
     private interface Password {
-        @NotBlank String getPassword();
+         void setPassword(@Size(min = 6, max = 50)String password);
     }
 
     private interface Email {
-        @javax.validation.constraints.Email String getEmail();
+         void setEmail(@javax.validation.constraints.Email String email);
     }
 
     private interface Telephone {
-        @Size(min = 6, max = 25) String getPhoneNumber();
-    }
-
-    private interface Status {
-        UserStatusEnum getStatus();
-    }
-
-    private interface IsEmailVerified {
-        Boolean isEmailVerified();
-    }
-
-    private interface IsPhoneNumberVerified {
-        Boolean isTelephoneVerified();
-    }
-
-    private interface Roles {
-        List<AppRoleForUserDto> getRoles();
+         void setPhoneNumber(@Size(min = 6, max = 25) String phone);
     }
 
     public enum Request {
         ;
         @NoArgsConstructor
-        public static class CreateOrUpdate implements Firstname, Surname, Lastname, Password, Email, Telephone, Status {
+        public static class CreateOrUpdate implements Firstname, Surname, Password, Email, Telephone {
+            @Getter
             @Setter
+            private Long id;
+            @Setter@Getter
             private String firstname;
-            @Setter
+            @Setter@Getter
             private String surname;
-            @Setter
+            @Setter@Getter
             private String lastname;
-            @Setter
+            @Setter@Getter
             private String password;
-            @Setter
+            @Setter@Getter
             private String email;
-            @Setter
+            @Setter@Getter
             private String phoneNumber;
-            @Setter
+            @Setter@Getter
             private UserStatusEnum status;
+            @Getter@Setter
+            private List<Long> roles;
 
 
             public CreateOrUpdate(String firstname, String surname, String lastname, String password, String email, String phoneNumber, UserStatusEnum status) {
@@ -84,41 +74,25 @@ public enum AppUserDto {
                 this.phoneNumber = phoneNumber;
                 this.status = status;
             }
-
-            @Override
-            public String getFirstname() {
-                return this.firstname;
+            public AppUser getUserFromDto(BCryptPasswordEncoder passwordEncoder,Integer credentialExpired ){
+                AppUser usr = new AppUser();
+                usr.setId(this.id);
+                usr.setFirstname(this.firstname);
+                usr.setLastname(this.lastname);
+                usr.setSurname(this.surname);
+                usr.setEmail(this.email);
+                if (PhoneNumberValidator.validatePhoneNumber(this.phoneNumber)){
+                    usr.setPhoneNumber(this.phoneNumber);
+                }else throw new PhoneNumberValidationException();
+                if(this.password!=null){
+                    usr.setPassword(passwordEncoder.encode(this.password));
+                    usr.setExpiredCredentials(LocalDateTime.now().plusMonths(credentialExpired));
+                }
+                System.out.println(roles);
+                return usr;
             }
 
-            @Override
-            public String getPassword() {
-                return this.password;
-            }
 
-            @Override
-            public String getEmail() {
-                return this.email;
-            }
-
-            @Override
-            public String getPhoneNumber() {
-                return this.phoneNumber;
-            }
-
-            @Override
-            public String getSurname() {
-                return this.surname;
-            }
-
-            @Override
-            public String getLastname() {
-                return this.lastname;
-            }
-
-            @Override
-            public UserStatusEnum getStatus() {
-                return this.status;
-            }
         }
 
 
@@ -173,6 +147,7 @@ public enum AppUserDto {
             private UserStatusEnum status;
 
 
+
             public UserTable(AppUser usr) {
                 this.id = usr.getId();
                 this.firstname = usr.getFirstname();
@@ -182,6 +157,8 @@ public enum AppUserDto {
                 this.phoneNumber = usr.getPhoneNumber();
                 this.status = usr.getStatus();
             }
+
+
 
         }
 
@@ -205,6 +182,10 @@ public enum AppUserDto {
             private Boolean isEmailVerified;
             @Setter@Getter
             private Boolean isPhoneNumberVerified;
+            @Getter@Setter
+            private LocalDateTime created_at;
+            @Getter@Setter
+            private LocalDateTime updated_at;
             @Setter@Getter
             private List<AppRoleForUserDto> roles;
 
@@ -218,6 +199,8 @@ public enum AppUserDto {
                 this.status = usr.getStatus();
                 this.isEmailVerified = usr.getIsEmailVerified();
                 this.isPhoneNumberVerified = usr.getPhoneVerified();
+                this.created_at=usr.getCreatedAt();
+                this.updated_at=usr.getUpdatedAt();
                 this.roles = usr.getRoles().stream().map(AppRoleForUserDto::new).collect(Collectors.toList());
             }
         }

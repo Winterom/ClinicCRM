@@ -5,7 +5,7 @@ create table app_user
     surname   varchar(50) not null,
     lastname    varchar (50),
     password   varchar(255) not null,
-    email      varchar(50) unique,
+    email      varchar(50) unique not null,
     phone_number  varchar (25) unique,
     status     varchar(30) not null,
     email_verified boolean not null ,

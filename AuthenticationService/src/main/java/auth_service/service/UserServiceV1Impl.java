@@ -5,13 +5,11 @@ import auth_service.dto.user_dto.AppUserDto;
 import auth_service.entities.AppUser;
 import auth_service.entities.UserStatusEnum;
 import auth_service.exception.AppUserNotFoundException;
-import auth_service.exception.EmailExistsException;
-import auth_service.exception.PhoneNumberExistsException;
-import auth_service.exception.PhoneNumberValidationException;
+
 import auth_service.repositoryes.UserRepository;
 import auth_service.repositoryes.specification.AppUserSpecification;
 import auth_service.validators.FieldNameChecker;
-import auth_service.validators.PhoneNumberValidator;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,10 +17,12 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
-import java.time.LocalDateTime;
-import java.util.HashSet;
+import javax.persistence.Query;
+
+
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -38,8 +38,6 @@ public class UserServiceV1Impl  implements UserService{
     @Value("${app.credential.expired}")
     private Integer credentialExpired;
 
-    @Value("${jwt.refresh.max_age}")
-    private Integer refreshTokenMaxAge;
 
 
 
@@ -58,31 +56,33 @@ public class UserServiceV1Impl  implements UserService{
         return new AppUserDto.Response.UserProfile(user);
     }
 
-    @Override
-    public void registerUser(AppUserDto.Request.CreateOrUpdate userDto) {
 
-        if (userRepository.getAppUsersByEmail(userDto.getEmail()).isPresent()){
-            throw new EmailExistsException(userDto.getEmail());
-        }
-        if (userRepository.getAppUserByPhoneNumber(userDto.getPhoneNumber()).isPresent()){
-            throw new PhoneNumberExistsException(userDto.getPhoneNumber());
-        }
-        AppUser usr = new AppUser();
-        usr.setFirstname(userDto.getFirstname());
-        usr.setLastname(userDto.getLastname());
-        usr.setSurname(userDto.getSurname());
-        usr.setEmail(userDto.getEmail());
-        usr.setPassword(passwordEncoder.encode(userDto.getPassword()));
-        if (PhoneNumberValidator.validatePhoneNumber(userDto.getPhoneNumber())){
-            usr.setPhoneNumber(userDto.getPhoneNumber());
-        }else throw new PhoneNumberValidationException();
-        usr.setExpiredCredentials(LocalDateTime.now().plusMonths(credentialExpired));
-        usr.setRoles(new HashSet<>());
-        userRepository.save(usr);
-    }
     @Override
+    @Transactional
     public void updateAppUser(AppUserDto.Request.CreateOrUpdate userDto) {
 
+        if(userDto.getId()==null||userDto.getPassword()!=null){
+            AppUser usr = userDto.getUserFromDto(passwordEncoder, this.credentialExpired);
+            entityManager.persist(usr);
+            entityManager.flush();
+
+        }
+
+        Query query = entityManager.createQuery("update AppUser as u  set u.surname =:surname,u.firstname=:firstname," +
+                "u.lastname=:lastname, u.email=:email,u.phoneNumber=:phone, " +
+                "u.status=:status, u.updatedAt=current_timestamp  where u.id=:id");
+
+        query.setParameter("id",userDto.getId());
+        query.setParameter("surname",userDto.getSurname());
+        query.setParameter("firstname",userDto.getFirstname());
+        if (userDto.getLastname()==null){
+            userDto.setLastname(" ");
+        }
+        query.setParameter("lastname",userDto.getLastname());
+        query.setParameter("email",userDto.getEmail());
+        query.setParameter("phone",userDto.getPhoneNumber());
+        query.setParameter("status", userDto.getStatus());
+        query.executeUpdate();
     }
 
 

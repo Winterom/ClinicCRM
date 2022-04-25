@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {DataService} from "../../../../service/data.service";
+import {UserDataService} from "../../../../service/user-data.service";
 import {AbstractControl, FormBuilder, FormGroup} from "@angular/forms";
 import {ActivatedRoute, Router} from "@angular/router";
 import {PaginationService} from "../../../../service/pagination.service";
@@ -36,7 +36,7 @@ export class UsersComponent  implements OnInit{
   sizePage:number=10;
   statusEnum = new Set<string>();
 
-  constructor(private formBuilder: FormBuilder,private dataService:DataService,
+  constructor(private formBuilder: FormBuilder,private dataService:UserDataService,
               private router:Router,private route: ActivatedRoute, private pageService:PaginationService) {
 
     this.form=this.formBuilder.group({

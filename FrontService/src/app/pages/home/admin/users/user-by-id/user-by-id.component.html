@@ -1,9 +1,23 @@
 
 
-<h2>{{titlePage}}</h2>
-<h3>Ф.И.О.: {{fullName}}</h3>
+<h2>{{titlePage}}: {{fullName}}</h2>
 <form [formGroup]="form" (ngSubmit)="onSubmit()" class="user_container">
-  <em *ngIf="!isNewUser" class="em_id">ID пользователя: {{id}}</em>
+  <div *ngIf="!isNewUser">
+  <details class="info_details" open>
+    <summary class="fio_summary" >
+      Информация о профиле
+    </summary>
+    <div class="em_id"><em  >ID пользователя: {{id}}</em></div>
+    <div class="em_id"><em  >Профиль создан: {{createdAt}}</em></div>
+    <div class="em_id"><em  >Последнее обновление: {{lastUpdate}}</em></div>
+    <div class="em_id">
+      <em>Tекущий статус</em>
+      <select id="status" formControlName="controlSelectStatus">
+        <option *ngFor="let status of statusValue"[ngValue]="status.id" style="{{status.style}}">{{status.value}}</option>
+      </select>
+    </div>
+  </details>
+  </div>
   <details class="fio_details">
     <summary class="fio_summary">
       Полное имя
@@ -15,9 +29,12 @@
         <div>Отчество:</div>
       </div>
       <div class="fio_input">
-        <div><input formControlName="controlInputSurname"  type="text" (input)="fioInputChange()"></div>
-        <div><input formControlName="controlInputName" type="text" (input)="fioInputChange()"></div>
-        <div><input formControlName="controlInputLastName" type="text" (input)="fioInputChange()"></div>
+        <div><input formControlName="controlInputSurname"  type="text" (input)="fioInputChange()"
+                    [ngClass]="{ 'is-invalid': submitted && f['controlInputSurname'].errors }"></div>
+        <div><input formControlName="controlInputName" type="text" (input)="fioInputChange()"
+                    [ngClass]="{ 'is-invalid': submitted && f['controlInputName'].errors }"></div>
+        <div><input formControlName="controlInputLastName" type="text" (input)="fioInputChange()"
+                    [ngClass]="{ 'is-invalid': submitted && f['controlInputLastName'].errors }"></div>
       </div>
     </div>
   </details>
@@ -31,9 +48,15 @@
       <div>Телефон:</div>
     </div>
     <div class="fio_input">
-      <div><input formControlName="controlInputEmail"type="text"></div>
-      <div><input formControlName="controlInputPhone"type="text"></div>
-    </div>
+      <div><input formControlName="controlInputEmail"type="text"
+                  [ngClass]="{ 'is-invalid': submitted && f['controlInputEmail'].errors }"></div>
+      <div><input formControlName="controlInputPhone"type="text"
+                  [ngClass]="{ 'is-invalid': submitted && f['controlInputPhone'].errors}"></div>
+    </div >
+      <div *ngIf="!isNewUser" >
+        <div class="verified" [ngClass]="isEmailVerified ? 'verify-true':'verify-false'">{{emailVerified}}</div>
+        <div class="verified" [ngClass]="isPhoneNumberVerified ? 'verify-true':'verify-false'">{{phoneVerified}}</div>
+      </div>
     </div>
   </details>
   <details>
@@ -54,13 +77,13 @@
       <div class="table-scroll-body">
         <table id="body-table">
           <tbody>
-          <tr *ngFor="let item of roleArray" >
+          <tr *ngFor="let item of roleArray, let i=index" >
             <td class="td_id">{{item.id}}</td>
-            <td class="td_field">{{item.roleName}}</td>
+            <td class="td_field">{{item.name}}</td>
             <td class="td_field">{{item.description}}</td>
             <td class="td_field input_field">
               <input class="custom-checkbox"
-                     type="checkbox" [checked]="item.userHasRole==true">
+                     type="checkbox" [formControl]="item.control"  >
             </td>
           </tr>
           </tbody>
@@ -78,4 +101,7 @@
 <div class="button_create_user">
   <button class="button_form" (click)="onReset()" [disabled]="!form.dirty">Отменинить изменения</button>
 </div>
+  <div *ngIf="errorStatus!=0" class="message" [ngClass]="errorStatus===200 ? 'response_ok':'response_bad'" >
+    <em>{{messageString}}</em>
+  </div>
 </div>
