@@ -14,6 +14,7 @@ export class ApiService {
    private _getAllUser ='auth/api/v1/users/get_all';
    private _getProfileById = 'auth/api/v1/users/get_by_id/'
    private _getRolesByUser = 'auth/api/v1/roles/user_roles/'
+   private _updateOrSave= 'auth/api/v1/users/update'
 
   get getAllUser(): string {
     return this.API_ROOT+this._getAllUser;
@@ -40,4 +41,7 @@ export class ApiService {
     return this.API_ROOT+this._getProfileById;
   }
 
+  get updateOrSave(): string {
+    return this.API_ROOT+this._updateOrSave;
+  }
 }

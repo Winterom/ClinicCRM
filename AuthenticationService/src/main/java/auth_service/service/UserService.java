@@ -12,7 +12,6 @@ import java.util.Set;
 @Service
 public interface UserService {
    AppUserDto.Response.UserProfile getUserById(Long id);
-   void registerUser(AppUserDto.Request.CreateOrUpdate userDto);
    Boolean checkEmail(String email);
    Boolean checkPhoneNumber(String phoneNumber);
 

@@ -46,14 +46,7 @@ form{
   padding-left: 1rem;
   padding-top: 1rem;
 }
-label{
-  background: white;
-  position: relative;
-  bottom: -10px;
-  left: 20px;
-  z-index: 10;
 
-}
 form em{
   margin-right: 1em;
   margin-left: 1em;
@@ -140,6 +133,13 @@ input[type=checkbox]:checked:after {
   border-radius: 0.25rem;
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
+.is-invalid{
+  border: 2px solid red;
+}
+.is-invalid:after{
+  content: '\9940';
+}
+
 .status_select{
   margin-top: 2vh;
   margin-right: 3vw;
@@ -263,7 +263,4 @@ td{
   justify-content: space-between;
 }
 
-.button_create_user{
-
-}
 

@@ -17,6 +17,7 @@ export class SignInComponent implements OnInit {
   submitted = false;
   redirectURL:string|undefined;
 
+
   constructor( private formBuilder: FormBuilder, private user: UserAppService,private auth: AuthService,private router: Router, private route: ActivatedRoute) {
     this.form = this.formBuilder.group({
       email: ['', Validators.required],
@@ -42,7 +43,6 @@ export class SignInComponent implements OnInit {
     }
     this.auth.login(this.form.value.email, this.form.value.password).subscribe({
       next: data => {
-        console.log(data);
         this.user.saveToken(data.accessToken);
         this.isLoginFailed = false;
         if (this.redirectURL) {

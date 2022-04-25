@@ -10,3 +10,5 @@
 /FrontService/.editorconfig
 /AuthenticationService/target/
 /SenderService/target/
+/.idea/
+/AuthenticationService/target/
